@@ -1,22 +1,22 @@
 <?php
 
-use App\Http\Controllers\Api\AdminPanalController;
+use App\Http\Controllers\API\AdminPanalController;
 use Illuminate\Support\Facades\Route;;
-use App\Http\Controllers\Api\EvidenceController;
-use App\Http\Controllers\Api\DashboardController;
-use App\Http\Controllers\Api\ContactController;
-use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\API\EvidenceController;
+use App\Http\Controllers\API\DashboardController;
+use App\Http\Controllers\API\ContactController;
+use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\AuthController;
-use App\Http\Controllers\Api\CaseMangment;
-use App\Http\Controllers\Api\ChatController;
-use App\Http\Controllers\Api\CommentController;
-use App\Http\Controllers\Api\DeepFakeController;
-use App\Http\Controllers\Api\DnaController;
-use App\Http\Controllers\Api\FacePredictionController;
-use App\Http\Controllers\Api\FaceRecogController;
-use App\Http\Controllers\Api\LikeController;
-use App\Http\Controllers\Api\PostController;
-use App\Http\Controllers\Api\GoogleAuthController;
+use App\Http\Controllers\API\CaseMangment;
+use App\Http\Controllers\API\ChatController;
+use App\Http\Controllers\API\CommentController;
+use App\Http\Controllers\API\DeepFakeController;
+use App\Http\Controllers\API\DnaController;
+use App\Http\Controllers\API\FacePredictionController;
+use App\Http\Controllers\API\FaceRecogController;
+use App\Http\Controllers\API\LikeController;
+use App\Http\Controllers\API\PostController;
+use App\Http\Controllers\API\GoogleAuthController;
 
 use Illuminate\Http\Request;
 
