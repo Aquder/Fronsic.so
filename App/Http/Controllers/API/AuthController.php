@@ -73,6 +73,7 @@ class AuthController extends Controller {
         ] );
     }
     public function register( Request $request ) {
+        
         $validatedData = validator( $request->all(), [
             'name' => 'required|string',
             'email' => 'required|email|unique:users',
