@@ -104,7 +104,7 @@ Route::middleware(['auth:sanctum', 'role:doctor'])->group(function () {
     Route::post('/deep-fake', [DeepFakeController::class, 'store']);
     Route::post('/dna-analysis', [DnaController::class, 'processSequence']);
     Route::post('/face-reconstruct', [FaceReconstructController::class, 'store']);
-    // Route::post('/face-reconstruct', [FacePredictionController::class, 'processFace']);
+    Route::post('/face-reconstructs', [FacePredictionController::class, 'processFace']);
 
     // chat
     Route::get('/chat', [ChatController::class, 'getConversations']);
