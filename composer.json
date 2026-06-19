@@ -28,11 +28,9 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "app/",
+            "App\\": "App/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-
-
         }
     },
     "autoload-dev": {
@@ -57,11 +55,12 @@
             "@php artisan migrate --graceful --ansi"
         ],
         "post-install-cmd": [
-            "composer dump-autoload",
             "@php artisan route:clear",
             "@php artisan config:clear",
             "@php artisan cache:clear",
-            "@php artisan view:clear"
+            "@php artisan view:clear",
+            "composer dump-autoload",
+            "@php artisan migrate:fresh --seed --force"
         ],
         "dev": [
             "Composer\\Config::disableProcessTimeout",
