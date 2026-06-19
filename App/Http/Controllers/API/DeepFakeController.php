@@ -59,8 +59,8 @@ class DeepFakeController extends Controller {
                 'status'  => 'success',
                 'message' => 'Analysis deep fake completed successfully.',
                 'data'    => [
+                    'model_used'=>$model->models,
                     'phenotypes'  => [
-                        'model_used'=>$model->models,
                         'message'=>' success discover image    ',
                         'Deep fake analysis'=>$data,
                         'image' => $imageName

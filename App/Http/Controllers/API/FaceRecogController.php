@@ -51,8 +51,8 @@ class FaceRecogController extends Controller {
             return response()->json( [
                 'status'  => 'success',
                 'message' => 'Analysis face recognation completed successfully.',
-                'model_used'=>$model->models,
                 'data'    => [
+                    'model_used'=>$model->models,
                     'phenotypes'  => [
                         'fake recognation analysis' => $data,
                         'image' => $imageName

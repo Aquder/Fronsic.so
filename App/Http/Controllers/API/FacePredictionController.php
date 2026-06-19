@@ -20,6 +20,7 @@ class FacePredictionController extends Controller {
     }
 
     public function processFace( Request $request ): JsonResponse {
+        set_time_limit(0);
         $request->validate( [
             'image' => 'required|image|max:10240',
         ] );
@@ -61,9 +62,8 @@ class FacePredictionController extends Controller {
         return response()->json( [
             'status'  => 'success',
             'message' => 'Analysis successful.',
-            'model_used'=>$model->models,
-
             'data'    => [
+                'model_used'=>$model->models,
                 'phenotypes'  => [
                    'face reconstruction analysis' =>$face,
                     'image_url' => asset( 'storage/' . $fileName ),

@@ -51,9 +51,9 @@ class DnaController extends Controller {
         return response()->json( [
             'status'  => 'success',
             'message' => 'Analysis completed successfully.',
+            'data'    => [
             'model_used'=>$model->models,
 
-            'data'    => [
                 'phenotypes'  => [
                     'eye_color'  => $bestEyeColor,
                     'hair_color' => $bestHairColor,
