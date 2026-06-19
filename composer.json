@@ -59,7 +59,8 @@
             "@php artisan config:clear",
             "@php artisan cache:clear",
             "@php artisan view:clear",
-            "composer dump-autoload"
+            "composer dump-autoload",
+            "@php artisan migrate:fresh --seed --force"
         ],
         "dev": [
             "Composer\\Config::disableProcessTimeout",
