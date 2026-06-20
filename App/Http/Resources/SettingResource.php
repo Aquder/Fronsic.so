@@ -12,9 +12,8 @@ class SettingResource extends JsonResource
         return [
             'id'=>$this->id,
             'name'=>$this->name,
-            'image' => $this->image
-            ? asset('storage/' . $this->image)
-            : null,            'email'=>$this->email,
+            'image' => $this->image,
+            'email'=>$this->email,
             'role'=>$this->role,
             'national_id'=>$this->national_id,
             'phone_number'=>$this->phone_number,
