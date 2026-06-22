@@ -69,7 +69,7 @@
     <div class="max-w-6xl mx-auto mb-10">
         <div class="flex justify-between items-center border-b border-gray-700 pb-4 mb-6">
             <div>
-                <h1 class="text-3xl font-bold text-white tracking-wide">Forensic AI API <span
+                <h1 class="text-3xl font-bold text-white tracking-wide">Welcome Forensic AI API <span
                         class="text-primary text-lg font-normal">v1.0 (Workspace by Ahmed Quder)</span></h1>
                 <p class="text-gray-400 mt-1">Interactive API documentation & testing interface.</p>
             </div>
