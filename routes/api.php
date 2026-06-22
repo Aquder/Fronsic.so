@@ -115,10 +115,10 @@ Route::middleware([
     Route::delete('delete-evidence/{evidence}/use-case/{usecase}', [EvidenceController::class, 'destroy']);
 
     //models AI
-    Route::post('/face-recognation', [FaceRecogController::class, 'store'])->name("model_ai");
-    Route::post('/deep-fake', [DeepFakeController::class, 'store'])->name("model_ai");
-    Route::post('/dna-analysis', [DnaController::class, 'processSequence'])->name("model_ai");
-    Route::post('/face-reconstructs', [FacePredictionController::class, 'processFace'])->name("model_ai");
+    Route::post('/face-recognation', [FaceRecogController::class, 'store']);
+    Route::post('/deep-fake', [DeepFakeController::class, 'store']);
+    Route::post('/dna-analysis', [DnaController::class, 'processSequence']);
+    Route::post('/face-reconstructs', [FacePredictionController::class, 'processFace']);
 
     // chat
     Route::get('/chat', [ChatController::class, 'getConversations']);
