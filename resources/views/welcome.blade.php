@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,122 +26,703 @@
         }
     </script>
     <style>
-        .method-get { border-color: #3b82f6; background-color: rgba(59, 130, 246, 0.1); }
-        .method-get .badge { background-color: #3b82f6; }
-        .method-post { border-color: #10b981; background-color: rgba(16, 185, 129, 0.1); }
-        .method-post .badge { background-color: #10b981; }
-        .method-put { border-color: #f59e0b; background-color: rgba(245, 158, 11, 0.1); }
-        .method-put .badge { background-color: #f59e0b; }
-        .method-delete { border-color: #ef4444; background-color: rgba(239, 68, 68, 0.1); }
-        .method-delete .badge { background-color: #ef4444; }
+        .method-get {
+            border-color: #3b82f6;
+            background-color: rgba(59, 130, 246, 0.1);
+        }
+
+        .method-get .badge {
+            background-color: #3b82f6;
+        }
+
+        .method-post {
+            border-color: #10b981;
+            background-color: rgba(16, 185, 129, 0.1);
+        }
+
+        .method-post .badge {
+            background-color: #10b981;
+        }
+
+        .method-put {
+            border-color: #f59e0b;
+            background-color: rgba(245, 158, 11, 0.1);
+        }
+
+        .method-put .badge {
+            background-color: #f59e0b;
+        }
+
+        .method-delete {
+            border-color: #ef4444;
+            background-color: rgba(239, 68, 68, 0.1);
+        }
+
+        .method-delete .badge {
+            background-color: #ef4444;
+        }
     </style>
 </head>
+
 <body class="bg-darkBg text-gray-200 font-sans antialiased p-6 min-h-screen">
 
     <div class="max-w-6xl mx-auto mb-10">
         <div class="flex justify-between items-center border-b border-gray-700 pb-4 mb-6">
             <div>
-                <h1 class="text-3xl font-bold text-white tracking-wide">Forensic AI API <span class="text-primary text-lg font-normal">v1.0 (Workspace by Ahmed Quder)</span></h1>
+                <h1 class="text-3xl font-bold text-white tracking-wide">Forensic AI API <span
+                        class="text-primary text-lg font-normal">v1.0 (Workspace by Ahmed Quder)</span></h1>
                 <p class="text-gray-400 mt-1">Interactive API documentation & testing interface.</p>
             </div>
         </div>
 
-        <div class="bg-cardBg p-5 rounded-lg border border-gray-700 shadow-lg flex flex-col md:flex-row gap-4 items-end">
+        <div
+            class="bg-cardBg p-5 rounded-lg border border-gray-700 shadow-lg flex flex-col md:flex-row gap-4 items-end">
             <div class="flex-1 w-full" style="display: none;">
                 <label class="block text-sm text-gray-400 mb-1">Base URL</label>
-                <input type="text" id="baseUrl" value="https://fronsicai-production-6288.up.railway.app/"  oninput="updateAllUrls()" class="w-full bg-darkBg border border-gray-600 rounded p-2 text-white outline-none focus:border-primary">
+                <input type="text" id="baseUrl" value="https://fronsicso-production.up.railway.app/"
+                    oninput="updateAllUrls()"
+                    class="w-full bg-darkBg border border-gray-600 rounded p-2 text-white outline-none focus:border-primary">
             </div>
             <div class="flex-1 w-full">
                 <label class="block text-sm text-gray-400 mb-1">Authorization (Bearer Token)</label>
                 <div class="relative">
                     <i class="fas fa-lock absolute left-3 top-3 text-gray-500"></i>
-                    <input type="text" id="globalToken" placeholder="Enter your token here..." class="w-full bg-darkBg border border-gray-600 rounded p-2 pl-9 text-white outline-none focus:border-primary">
+                    <input type="text" id="globalToken" placeholder="Enter your token here..."
+                        class="w-full bg-darkBg border border-gray-600 rounded p-2 pl-9 text-white outline-none focus:border-primary">
                 </div>
             </div>
         </div>
     </div>
 
     <div id="endpoints-container" class="max-w-6xl mx-auto space-y-4">
-        </div>
+    </div>
 
     <script>
         // 1. Array of Objects - 57 Endpoints (Matched exactly with Postman JSON)
         const endpoints = [
             // --- 1. Authentication ---
-            { method: 'POST', path: 'api/register', title: 'User Register', group: 'Authentication', bodyType: 'json', fields: [{name: 'name', type: 'text'}, {name: 'email', type: 'email'}, {name: 'phone_number', type: 'text'}, {name: 'date_of_birth', type: 'date'}, {name: 'national_id', type: 'text'}, {name: 'password', type: 'password'}] },
-            { method: 'POST', path: 'api/login', title: 'User Login', group: 'Authentication', bodyType: 'json', fields: [{name: 'email', type: 'email'}, {name: 'password', type: 'password'}] },
-            { method: 'POST', path: 'api/logout', title: 'Logout', group: 'Authentication', bodyType: 'json', fields: [] },
-            { method: 'POST', path: 'api/password/forgot', title: 'Forgot Password', group: 'Authentication', bodyType: 'json', fields: [{name: 'email', type: 'email'}] },
-            { method: 'POST', path: 'api/password/verify-code', title: 'Verify Code', group: 'Authentication', bodyType: 'json', fields: [{name: 'otp', type: 'number'},{name: 'email', type: 'email'}] },
-            { method: 'POST', path: 'api/password/reset', title: 'Reset Password', group: 'Authentication', bodyType: 'json', fields: [{name: 'email', type: 'email'}, {name: 'otp', type: 'number'}, {name: 'password', type: 'password'}, {name: 'password_confirmation', type: 'password'}] },
+            {
+                method: 'POST',
+                path: 'api/register',
+                title: 'User Register',
+                group: 'Authentication',
+                bodyType: 'json',
+                fields: [{
+                    name: 'name',
+                    type: 'text'
+                }, {
+                    name: 'email',
+                    type: 'email'
+                }, {
+                    name: 'phone_number',
+                    type: 'text'
+                }, {
+                    name: 'date_of_birth',
+                    type: 'date'
+                }, {
+                    name: 'national_id',
+                    type: 'text'
+                }, {
+                    name: 'password',
+                    type: 'password'
+                }]
+            },
+            {
+                method: 'POST',
+                path: 'api/login',
+                title: 'User Login',
+                group: 'Authentication',
+                bodyType: 'json',
+                fields: [{
+                    name: 'email',
+                    type: 'email'
+                }, {
+                    name: 'password',
+                    type: 'password'
+                }]
+            },
+            {
+                method: 'POST',
+                path: 'api/logout',
+                title: 'Logout',
+                group: 'Authentication',
+                bodyType: 'json',
+                fields: []
+            },
+            {
+                method: 'POST',
+                path: 'api/password/forgot',
+                title: 'Forgot Password',
+                group: 'Authentication',
+                bodyType: 'json',
+                fields: [{
+                    name: 'email',
+                    type: 'email'
+                }]
+            },
+            {
+                method: 'POST',
+                path: 'api/password/verify-code',
+                title: 'Verify Code',
+                group: 'Authentication',
+                bodyType: 'json',
+                fields: [{
+                    name: 'otp',
+                    type: 'number'
+                }, {
+                    name: 'email',
+                    type: 'email'
+                }]
+            },
+            {
+                method: 'POST',
+                path: 'api/password/reset',
+                title: 'Reset Password',
+                group: 'Authentication',
+                bodyType: 'json',
+                fields: [{
+                    name: 'email',
+                    type: 'email'
+                }, {
+                    name: 'otp',
+                    type: 'number'
+                }, {
+                    name: 'password',
+                    type: 'password'
+                }, {
+                    name: 'password_confirmation',
+                    type: 'password'
+                }]
+            },
 
             // --- 2. Doctor Hub ---
-            { method: 'GET', path: 'api/doctor/dashboard', title: 'Doctor Dashboard', group: 'Doctor Hub', hasParams: false },
-            { method: 'GET', path: 'api/doctor/dashboard-flutter', title: 'Flutter Dashboard', group: 'Doctor Hub', hasParams: false },
-            { method: 'GET', path: 'api/doctor/dashboard-flutter/active-case', title: 'Active Cases Flutter', group: 'Doctor Hub', hasParams: false },
-            { method: 'GET', path: 'api/doctor/dashboard-flutter/complete-case', title: 'Complete Cases Flutter', group: 'Doctor Hub', hasParams: false },
-            { method: 'GET', path: 'api/doctor/dashboard-flutter/evidence-list', title: 'Evidence List Flutter', group: 'Doctor Hub', hasParams: false },
+            {
+                method: 'GET',
+                path: 'api/doctor/dashboard',
+                title: 'Doctor Dashboard',
+                group: 'Doctor Hub',
+                hasParams: false
+            },
+            {
+                method: 'GET',
+                path: 'api/doctor/dashboard-flutter',
+                title: 'Flutter Dashboard',
+                group: 'Doctor Hub',
+                hasParams: false
+            },
+            {
+                method: 'GET',
+                path: 'api/doctor/dashboard-flutter/active-case',
+                title: 'Active Cases Flutter',
+                group: 'Doctor Hub',
+                hasParams: false
+            },
+            {
+                method: 'GET',
+                path: 'api/doctor/dashboard-flutter/complete-case',
+                title: 'Complete Cases Flutter',
+                group: 'Doctor Hub',
+                hasParams: false
+            },
+            {
+                method: 'GET',
+                path: 'api/doctor/dashboard-flutter/evidence-list',
+                title: 'Evidence List Flutter',
+                group: 'Doctor Hub',
+                hasParams: false
+            },
 
             // --- 3. Use Cases ---
-            { method: 'GET', path: 'api/all-cases', title: 'All Cases', group: 'Use Cases', bodyType: 'json', fields: [] },
-            { method: 'POST', path: 'api/add/use-case', title: 'Add Use Case', group: 'Use Cases', bodyType: 'json', fields: [{name: 'name', type: 'text'}, {name: 'description', type: 'text'} ] },
-            { method: 'GET', path: 'api/show/use-case/{id}', title: 'Show Use Case', group: 'Use Cases', hasParams: true, params: ['id'] },
-            { method: 'PUT', path: 'api/update/use-case/{id}', title: 'Update Use Case', group: 'Use Cases', hasParams: true, params: ['id'], bodyType: 'json', fields: [{name: 'name', type: 'text'}, {name: 'description', type: 'text'}] },
-            { method: 'DELETE', path: 'api/delete/use-case/{id}', title: 'Delete Use Case', group: 'Use Cases', hasParams: true, params: ['id'] },
-            { method: 'GET', path: 'api/toggle-active/use-case/{id}', title: 'Toggle Active Use Case', group: 'Use Cases', hasParams: true, params: ['id'] },
+            {
+                method: 'GET',
+                path: 'api/all-cases',
+                title: 'All Cases',
+                group: 'Use Cases',
+                bodyType: 'json',
+                fields: []
+            },
+            {
+                method: 'POST',
+                path: 'api/add/use-case',
+                title: 'Add Use Case',
+                group: 'Use Cases',
+                bodyType: 'json',
+                fields: [{
+                    name: 'name',
+                    type: 'text'
+                }, {
+                    name: 'description',
+                    type: 'text'
+                }]
+            },
+            {
+                method: 'GET',
+                path: 'api/show/use-case/{id}',
+                title: 'Show Use Case',
+                group: 'Use Cases',
+                hasParams: true,
+                params: ['id']
+            },
+            {
+                method: 'PUT',
+                path: 'api/update/use-case/{id}',
+                title: 'Update Use Case',
+                group: 'Use Cases',
+                hasParams: true,
+                params: ['id'],
+                bodyType: 'json',
+                fields: [{
+                    name: 'name',
+                    type: 'text'
+                }, {
+                    name: 'description',
+                    type: 'text'
+                }]
+            },
+            {
+                method: 'DELETE',
+                path: 'api/delete/use-case/{id}',
+                title: 'Delete Use Case',
+                group: 'Use Cases',
+                hasParams: true,
+                params: ['id']
+            },
+            {
+                method: 'GET',
+                path: 'api/toggle-active/use-case/{id}',
+                title: 'Toggle Active Use Case',
+                group: 'Use Cases',
+                hasParams: true,
+                params: ['id']
+            },
 
             // --- 4. Evidence ---
-            { method: 'POST', path: 'api/save-as-evidence', title: 'Save As Evidence', group: 'Evidence', bodyType: 'json', fields: [{name: 'name', type: 'text'},{name: 'case_id', type: 'number'}, {name: 'data', type: 'text'}] },
-            { method: 'PUT', path: 'api/update-evidence/{id}/use-case/{usecaseId}', title: 'Update Evidence', group: 'Evidence', hasParams: true, params: ['id', 'usecaseId'], bodyType: 'json', fields: [{name: 'name', type: 'text'}] },
-            { method: 'DELETE', path: 'api/delete-evidence/{id}/use-case/{usecaseId}', title: 'Delete Evidence', group: 'Evidence', hasParams: true, params: ['id', 'usecaseId'] },
+            {
+                method: 'POST',
+                path: 'api/save-as-evidence',
+                title: 'Save As Evidence',
+                group: 'Evidence',
+                bodyType: 'json',
+                fields: [{
+                    name: 'name',
+                    type: 'text'
+                }, {
+                    name: 'case_id',
+                    type: 'number'
+                }, {
+                    name: 'data',
+                    type: 'text'
+                }]
+            },
+            {
+                method: 'PUT',
+                path: 'api/update-evidence/{id}/use-case/{usecaseId}',
+                title: 'Update Evidence',
+                group: 'Evidence',
+                hasParams: true,
+                params: ['id', 'usecaseId'],
+                bodyType: 'json',
+                fields: [{
+                    name: 'name',
+                    type: 'text'
+                }]
+            },
+            {
+                method: 'DELETE',
+                path: 'api/delete-evidence/{id}/use-case/{usecaseId}',
+                title: 'Delete Evidence',
+                group: 'Evidence',
+                hasParams: true,
+                params: ['id', 'usecaseId']
+            },
 
             // --- 5. Feed & Articles ---
-            { method: 'GET', path: 'api/feed', title: 'Get All Feeds', group: 'Feed & Articles', hasParams: false },
-            { method: 'POST', path: 'api/add/new-article', title: 'Add New Article', group: 'Feed & Articles', bodyType: 'formdata', fields: [{name: 'title', type: 'text'}, {name: 'content', type: 'text'}, {name: 'image', type: 'file'}] },
-            { method: 'POST', path: 'api/update-article/{id}', title: 'Update Article', group: 'Feed & Articles', hasParams: true, params: ['id'], bodyType: 'formdata', fields: [{name: 'title', type: 'text'}, {name: 'content', type: 'text'}, {name: 'image', type: 'file'}] },
-            { method: 'DELETE', path: 'api/delete-article/{id}', title: 'Delete Article', group: 'Feed & Articles', hasParams: true, params: ['id'] },
-            { method: 'GET', path: 'api/share-article/{id}', title: 'Share Article', group: 'Feed & Articles', hasParams: true, params: ['id'] },
-            { method: 'POST', path: 'api/add-comments-article/{id}', title: 'Add Comment (Article)', group: 'Feed & Articles', hasParams: true, params: ['id'], bodyType: 'json', fields: [{name: 'comment', type: 'text'}] },
-            { method: 'POST', path: 'api/toggle-like/article/{id}', title: 'Toggle Like (Article)', group: 'Feed & Articles', hasParams: true, params: ['id'], bodyType: 'json', fields: [] },
-            { method: 'GET', path: 'api/view-article/{id}', title: 'View Article', group: 'Feed & Articles', hasParams: true, params: ['id'] },
+            {
+                method: 'GET',
+                path: 'api/feed',
+                title: 'Get All Feeds',
+                group: 'Feed & Articles',
+                hasParams: false
+            },
+            {
+                method: 'POST',
+                path: 'api/add/new-article',
+                title: 'Add New Article',
+                group: 'Feed & Articles',
+                bodyType: 'formdata',
+                fields: [{
+                    name: 'title',
+                    type: 'text'
+                }, {
+                    name: 'content',
+                    type: 'text'
+                }, {
+                    name: 'image',
+                    type: 'file'
+                }]
+            },
+            {
+                method: 'POST',
+                path: 'api/update-article/{id}',
+                title: 'Update Article',
+                group: 'Feed & Articles',
+                hasParams: true,
+                params: ['id'],
+                bodyType: 'formdata',
+                fields: [{
+                    name: 'title',
+                    type: 'text'
+                }, {
+                    name: 'content',
+                    type: 'text'
+                }, {
+                    name: 'image',
+                    type: 'file'
+                }]
+            },
+            {
+                method: 'DELETE',
+                path: 'api/delete-article/{id}',
+                title: 'Delete Article',
+                group: 'Feed & Articles',
+                hasParams: true,
+                params: ['id']
+            },
+            {
+                method: 'GET',
+                path: 'api/share-article/{id}',
+                title: 'Share Article',
+                group: 'Feed & Articles',
+                hasParams: true,
+                params: ['id']
+            },
+            {
+                method: 'POST',
+                path: 'api/add-comments-article/{id}',
+                title: 'Add Comment (Article)',
+                group: 'Feed & Articles',
+                hasParams: true,
+                params: ['id'],
+                bodyType: 'json',
+                fields: [{
+                    name: 'comment',
+                    type: 'text'
+                }]
+            },
+            {
+                method: 'POST',
+                path: 'api/toggle-like/article/{id}',
+                title: 'Toggle Like (Article)',
+                group: 'Feed & Articles',
+                hasParams: true,
+                params: ['id'],
+                bodyType: 'json',
+                fields: []
+            },
+            {
+                method: 'GET',
+                path: 'api/view-article/{id}',
+                title: 'View Article',
+                group: 'Feed & Articles',
+                hasParams: true,
+                params: ['id']
+            },
 
-            { method: 'POST', path: 'api/add/new-feed', title: 'Add New Feed', group: 'Feed & Articles', bodyType: 'formdata', fields: [{name: 'content', type: 'text'}] },
-            { method: 'POST', path: 'api/update-feed/{id}', title: 'Update Feed', group: 'Feed & Articles', hasParams: true, params: ['id'], bodyType: 'formdata', fields: [{name: 'content', type: 'text'}] },
-            { method: 'DELETE', path: 'api/delete-feed/{id}', title: 'Delete Feed', group: 'Feed & Articles', hasParams: true, params: ['id'] },
-            { method: 'GET', path: 'api/share-feed/{id}', title: 'Share Feed', group: 'Feed & Articles', hasParams: true, params: ['id'] },
-            { method: 'POST', path: 'api/toggle-like/feed/{id}', title: 'Toggle Like (Feed)', group: 'Feed & Articles', hasParams: true, params: ['id'], bodyType: 'json', fields: [] },
-            { method: 'GET', path: 'api/view-feeds/{id}', title: 'View Feed', group: 'Feed & Articles', hasParams: true, params: ['id'] },
-            { method: 'POST', path: 'api/add-comments-feed/{id}', title: 'Add Comment (Feed)', group: 'Feed & Articles', hasParams: true, params: ['id'], bodyType: 'json', fields: [{name: 'comment', type: 'text'}] },
-            { method: 'PUT', path: 'api/update-comment/{id}', title: 'Update Comment', group: 'Feed & Articles', hasParams: true, params: ['id'], bodyType: 'json', fields: [{name: 'comment', type: 'text'}] },
-            { method: 'DELETE', path: 'api/delete-comment/{id}', title: 'Delete Comment', group: 'Feed & Articles', hasParams: true, params: ['id'] },
+            {
+                method: 'POST',
+                path: 'api/add/new-feed',
+                title: 'Add New Feed',
+                group: 'Feed & Articles',
+                bodyType: 'formdata',
+                fields: [{
+                    name: 'content',
+                    type: 'text'
+                }]
+            },
+            {
+                method: 'POST',
+                path: 'api/update-feed/{id}',
+                title: 'Update Feed',
+                group: 'Feed & Articles',
+                hasParams: true,
+                params: ['id'],
+                bodyType: 'formdata',
+                fields: [{
+                    name: 'content',
+                    type: 'text'
+                }]
+            },
+            {
+                method: 'DELETE',
+                path: 'api/delete-feed/{id}',
+                title: 'Delete Feed',
+                group: 'Feed & Articles',
+                hasParams: true,
+                params: ['id']
+            },
+            {
+                method: 'GET',
+                path: 'api/share-feed/{id}',
+                title: 'Share Feed',
+                group: 'Feed & Articles',
+                hasParams: true,
+                params: ['id']
+            },
+            {
+                method: 'POST',
+                path: 'api/toggle-like/feed/{id}',
+                title: 'Toggle Like (Feed)',
+                group: 'Feed & Articles',
+                hasParams: true,
+                params: ['id'],
+                bodyType: 'json',
+                fields: []
+            },
+            {
+                method: 'GET',
+                path: 'api/view-feeds/{id}',
+                title: 'View Feed',
+                group: 'Feed & Articles',
+                hasParams: true,
+                params: ['id']
+            },
+            {
+                method: 'POST',
+                path: 'api/add-comments-feed/{id}',
+                title: 'Add Comment (Feed)',
+                group: 'Feed & Articles',
+                hasParams: true,
+                params: ['id'],
+                bodyType: 'json',
+                fields: [{
+                    name: 'comment',
+                    type: 'text'
+                }]
+            },
+            {
+                method: 'PUT',
+                path: 'api/update-comment/{id}',
+                title: 'Update Comment',
+                group: 'Feed & Articles',
+                hasParams: true,
+                params: ['id'],
+                bodyType: 'json',
+                fields: [{
+                    name: 'comment',
+                    type: 'text'
+                }]
+            },
+            {
+                method: 'DELETE',
+                path: 'api/delete-comment/{id}',
+                title: 'Delete Comment',
+                group: 'Feed & Articles',
+                hasParams: true,
+                params: ['id']
+            },
 
             // --- 6. Chat ---
-            { method: 'GET', path: 'api/conversations/{id}/messages', title: 'Conversation Messages', group: 'Chat System', hasParams: true, params: ['id'] },
-            { method: 'GET', path: 'api/chat', title: 'Get Chats', group: 'Chat System', hasParams: false },
-            { method: 'POST', path: 'api/chat/send', title: 'Send Message', group: 'Chat System', bodyType: 'json', fields: [{name: 'query', type: 'text'},{name: 'conversation_id', type: 'number'}] },
+            {
+                method: 'GET',
+                path: 'api/conversations/{id}/messages',
+                title: 'Conversation Messages',
+                group: 'Chat System',
+                hasParams: true,
+                params: ['id']
+            },
+            {
+                method: 'GET',
+                path: 'api/chat',
+                title: 'Get Chats',
+                group: 'Chat System',
+                hasParams: false
+            },
+            {
+                method: 'POST',
+                path: 'api/chat/send',
+                title: 'Send Message',
+                group: 'Chat System',
+                bodyType: 'json',
+                fields: [{
+                    name: 'query',
+                    type: 'text'
+                }, {
+                    name: 'conversation_id',
+                    type: 'number'
+                }]
+            },
 
             // --- 7. AI Models ---
-            { method: 'POST', path: 'api/dna-analysis', title: 'DNA Analysis', group: 'AI Forensic Models', isDnaAnalysis: true },
-            { method: 'POST', path: 'api/deep-fake', title: 'Deep Fake Analyze', group: 'AI Forensic Models', bodyType: 'formdata', fields: [{name: 'image', type: 'file'}] },
-            { method: 'POST', path: 'api/face-recognation', title: 'Face Recognition', group: 'AI Forensic Models', bodyType: 'json', fields: [{name: 'image', type: 'file'}]  },
-            { method: 'POST', path: 'api/face-reconstructs', title: 'Face Reconstructs', group: 'AI Forensic Models', bodyType: 'formdata', fields: [{name: 'image', type: 'file'}] },
+            {
+                method: 'POST',
+                path: 'api/dna-analysis',
+                title: 'DNA Analysis',
+                group: 'AI Forensic Models',
+                isDnaAnalysis: true
+            },
+            {
+                method: 'POST',
+                path: 'api/deep-fake',
+                title: 'Deep Fake Analyze',
+                group: 'AI Forensic Models',
+                bodyType: 'formdata',
+                fields: [{
+                    name: 'image',
+                    type: 'file'
+                }]
+            },
+            {
+                method: 'POST',
+                path: 'api/face-recognation',
+                title: 'Face Recognition',
+                group: 'AI Forensic Models',
+                bodyType: 'json',
+                fields: [{
+                    name: 'image',
+                    type: 'file'
+                }]
+            },
+            {
+                method: 'POST',
+                path: 'api/face-reconstructs',
+                title: 'Face Reconstructs',
+                group: 'AI Forensic Models',
+                bodyType: 'formdata',
+                fields: [{
+                    name: 'image',
+                    type: 'file'
+                }]
+            },
 
             // --- 8. user setting ---
-            { method: 'GET', path: 'api/setting', title: 'User Settings', group: 'User Setting', hasParams: false },
-            { method: 'PUT', path: 'api/save-change', title: 'Save Profile Changes', group: 'User Setting', bodyType: 'json', fields: [{name: 'first_name', type: 'text'},{name: 'last_name', type: 'text'}, {name: 'email', type: 'email'},{name: 'phone_number', type: 'text'}, {name: 'date_of_birth', type: 'date'}, {name: 'national_id', type: 'text'},{name: 'image', type: 'file'}] },
-            { method: 'POST', path: 'api/change-password', title: 'Change Password', group: 'User Setting', bodyType: 'json', fields: [{name: 'current_password', type: 'password'}, {name: 'new_password', type: 'password'}, {name: 'new_password_confirmation', type: 'password'}] },
+            {
+                method: 'GET',
+                path: 'api/setting',
+                title: 'User Settings',
+                group: 'User Setting',
+                hasParams: false
+            },
+            {
+                method: 'PUT',
+                path: 'api/save-change',
+                title: 'Save Profile Changes',
+                group: 'User Setting',
+                bodyType: 'json',
+                fields: [{
+                    name: 'first_name',
+                    type: 'text'
+                }, {
+                    name: 'last_name',
+                    type: 'text'
+                }, {
+                    name: 'email',
+                    type: 'email'
+                }, {
+                    name: 'phone_number',
+                    type: 'text'
+                }, {
+                    name: 'date_of_birth',
+                    type: 'date'
+                }, {
+                    name: 'national_id',
+                    type: 'text'
+                }, {
+                    name: 'image',
+                    type: 'file'
+                }]
+            },
+            {
+                method: 'POST',
+                path: 'api/change-password',
+                title: 'Change Password',
+                group: 'User Setting',
+                bodyType: 'json',
+                fields: [{
+                    name: 'current_password',
+                    type: 'password'
+                }, {
+                    name: 'new_password',
+                    type: 'password'
+                }, {
+                    name: 'new_password_confirmation',
+                    type: 'password'
+                }]
+            },
 
             // --- 9. Admin Panel ---
-            { method: 'GET', path: 'api/admin/dashboard', title: 'Admin Dashboard Data', group: 'Admin Panel', hasParams: false },
-            { method: 'GET', path: 'api/admin/doctors', title: 'Get All Doctors', group: 'Admin Panel', hasParams: false },
-            { method: 'GET', path: 'api/admin/profile/doctors/{id}', title: 'Doctor Profile Data', group: 'Admin Panel', hasParams: true, params: ['id'] },
-            { method: 'GET', path: 'api/admin/cases', title: 'Cases Audit', group: 'Admin Panel', hasParams: false },
-            { method: 'GET', path: 'api/admin/community', title: 'Community Management', group: 'Admin Panel', hasParams: false },
-            { method: 'GET', path: 'api/admin/chat-mangement', title: 'Chat Management', group: 'Admin Panel', hasParams: false },
-            { method: 'GET', path: 'api/admin/toggle/active/{id}', title: 'Toggle User Active/Block', group: 'Admin Panel', hasParams: true, params: ['id'] },
-            { method: 'GET', path: 'api/admin/system-log', title: 'System Logs Hub', group: 'Admin Panel', hasParams: false },
-            { method: 'GET', path: 'api/admin/get-global-report-data', title: 'Export Global Report Data', group: 'Admin Panel', hasParams: false },
-            { method: 'GET', path: 'api/admin/doctors/assign/admin/{id}', title: 'Assign Admin to Doctor', group: 'Admin Panel', hasParams: true, params: ['id'] }
+            {
+                method: 'GET',
+                path: 'api/admin/dashboard',
+                title: 'Admin Dashboard Data',
+                group: 'Admin Panel',
+                hasParams: false
+            },
+            {
+                method: 'GET',
+                path: 'api/admin/doctors',
+                title: 'Get All Doctors',
+                group: 'Admin Panel',
+                hasParams: false
+            },
+            {
+                method: 'GET',
+                path: 'api/admin/profile/doctors/{id}',
+                title: 'Doctor Profile Data',
+                group: 'Admin Panel',
+                hasParams: true,
+                params: ['id']
+            },
+            {
+                method: 'GET',
+                path: 'api/admin/cases',
+                title: 'Cases Audit',
+                group: 'Admin Panel',
+                hasParams: false
+            },
+            {
+                method: 'GET',
+                path: 'api/admin/community',
+                title: 'Community Management',
+                group: 'Admin Panel',
+                hasParams: false
+            },
+            {
+                method: 'GET',
+                path: 'api/admin/chat-mangement',
+                title: 'Chat Management',
+                group: 'Admin Panel',
+                hasParams: false
+            },
+            {
+                method: 'GET',
+                path: 'api/admin/toggle/active/{id}',
+                title: 'Toggle User Active/Block',
+                group: 'Admin Panel',
+                hasParams: true,
+                params: ['id']
+            },
+            {
+                method: 'GET',
+                path: 'api/admin/system-log',
+                title: 'System Logs Hub',
+                group: 'Admin Panel',
+                hasParams: false
+            },
+            {
+                method: 'GET',
+                path: 'api/admin/get-global-report-data',
+                title: 'Export Global Report Data',
+                group: 'Admin Panel',
+                hasParams: false
+            },
+            {
+                method: 'GET',
+                path: 'api/admin/doctors/assign/admin/{id}',
+                title: 'Assign Admin to Doctor',
+                group: 'Admin Panel',
+                hasParams: true,
+                params: ['id']
+            }
         ];
 
         function renderUI() {
@@ -148,10 +730,19 @@
             container.innerHTML = '';
             let currentGroup = '';
 
+            // 🌟 استخراج الرابط الأساسي وتنظيفه لضمان دمج سليم
+            const baseUrlInput = document.getElementById('baseUrl');
+            let baseUrl = baseUrlInput ? baseUrlInput.value.trim().replace(/\/$/, "") : "";
+
             endpoints.forEach((ep, index) => {
+                // 🌟 تطبيق التعديل الذكي لضبط مسار الـ Endpoint
+                const cleanPath = ep.path.startsWith('/') ? ep.path : '/' + ep.path;
+                const initialFullUrl = baseUrl + cleanPath;
+
                 if (ep.group !== currentGroup) {
                     currentGroup = ep.group;
-                    container.innerHTML += `<h2 class="text-xl font-bold text-white mt-8 mb-4 border-b border-gray-700 pb-2">${currentGroup}</h2>`;
+                    container.innerHTML +=
+                        `<h2 class="text-xl font-bold text-white mt-8 mb-4 border-b border-gray-700 pb-2">${currentGroup}</h2>`;
                 }
 
                 const methodClass = `method-${ep.method.toLowerCase()}`;
@@ -161,7 +752,7 @@
                         <div class="p-3 flex items-center justify-between cursor-pointer" onclick="toggleDetails(${index})">
                             <div class="flex items-center gap-4">
                                 <span class="badge text-white font-bold px-3 py-1 rounded w-20 text-center">${ep.method}</span>
-                                <span class="font-mono font-bold text-gray-200">${ep.path}</span>
+                                <span class="font-mono font-bold text-gray-200" id="endpoint-url-${index}">${initialFullUrl}</span>
                                 <span class="text-gray-400 text-sm hidden md:inline-block">- ${ep.title}</span>
                             </div>
                             <i class="fas fa-chevron-down text-gray-400 transition-transform duration-200" id="icon-${index}"></i>
@@ -171,7 +762,7 @@
 
                             <div class="mb-5 bg-darkBg border border-gray-700 rounded p-3">
                                 <label class="block text-xs font-semibold text-gray-400 mb-1">Request URL</label>
-                                <div id="url-text-${index}" class="text-sm font-mono text-primary break-all"></div>
+                                <div id="url-text-${index}" class="text-sm font-mono text-primary break-all">${initialFullUrl}</div>
                             </div>
 
                             <h3 class="text-sm font-semibold text-gray-300 mb-4 border-b border-gray-700 pb-2">Parameters & Request Body</h3>
@@ -203,7 +794,7 @@
 
                             <div id="tab-content-seq-${index}" class="block">
                                 <label class="block text-sm text-gray-400 mb-1">Sequence Data Input:</label>
-                                <textarea name"sequance" id="dna-seq-${index}" rows="4" class="w-full bg-cardBg border border-gray-600 rounded p-2 text-white outline-none focus:border-primary" placeholder="Paste DNA sequences or allele values here..."></textarea>
+                                <textarea name="sequance" id="dna-seq-${index}" rows="4" class="w-full bg-cardBg border border-gray-600 rounded p-2 text-white outline-none focus:border-primary" placeholder="Paste DNA sequences or allele values here..."></textarea>
                             </div>
 
                             <div id="tab-content-file-${index}" class="hidden">
@@ -227,7 +818,8 @@
                     html += `</div>`;
                 }
                 // No Payload State
-                else if ((ep.method !== 'GET' && ep.fields && ep.fields.length === 0) || (ep.method === 'GET' && !ep.hasParams)) {
+                else if ((ep.method !== 'GET' && ep.fields && ep.fields.length === 0) || (ep.method === 'GET' && !ep
+                        .hasParams)) {
                     html += `
                         <div class="mb-4 bg-green-900 bg-opacity-20 border border-green-800 rounded p-3 text-sm text-green-400 flex items-center">
                             <i class="fas fa-check-square mr-2"></i> No Payload Required
@@ -263,22 +855,37 @@
                 ep.params.forEach(param => {
                     const el = document.getElementById(`param-${index}-${param}`);
                     const val = el ? el.value.trim() : '';
-                    if(val) {
+                    if (val) {
                         finalUrl = finalUrl.replace(`{${param}}`, val);
                     }
                 });
             }
 
             const urlElement = document.getElementById(`url-text-${index}`);
-            if(urlElement) {
+            if (urlElement) {
                 urlElement.textContent = finalUrl;
             }
         }
 
+        // 🌐 دالة تحديث الروابط في الواجهة بأعلى كفاءة لمنع التصاق النصوص
         function updateAllUrls() {
-            endpoints.forEach((_, idx) => updateLiveUrl(idx));
-        }
+            const baseUrlInput = document.getElementById('baseUrl');
+            if (!baseUrlInput) return;
 
+            // تنظيف الـ Base URL وإزالة أي Slash زائدة في النهاية
+            let baseUrl = baseUrlInput.value.trim().replace(/\/$/, "");
+
+            endpoints.forEach((ep, index) => {
+                const urlEl = document.getElementById(`endpoint-url-${index}`);
+                if (urlEl) {
+                    // التأكد من أن مسار الـ endpoint يبدأ بـ Slash واحدة دائماً
+                    const cleanPath = ep.path.startsWith('/') ? ep.path : '/' + ep.path;
+
+                    // دمج الرابط النهائي بشكل سليم 100%
+                    urlEl.textContent = baseUrl + cleanPath;
+                }
+            });
+        }
         // Tabs Logic (DNA Analysis)
         function switchDnaTab(index, tab) {
             document.getElementById(`dna-active-tab-${index}`).value = tab;
@@ -303,8 +910,8 @@
             }
         }
 
-  // Dynamic Request Executor Engine (Optimized for Laravel Backend)
-// Dynamic Request Executor Engine (Optimized for Laravel Backend & DNA Analysis)
+        // Dynamic Request Executor Engine (Optimized for Laravel Backend)
+        // Dynamic Request Executor Engine (Optimized for Laravel Backend & DNA Analysis)
         async function executeRequest(index) {
             const ep = endpoints[index];
             // تنظيف الـ baseUrl لضمان عدم وجود Slash زائدة في النهاية
@@ -323,7 +930,7 @@
                 ep.params.forEach(param => {
                     const el = document.getElementById(`param-${index}-${param}`);
                     const val = el ? el.value.trim() : '';
-                    if(val) finalUrl = finalUrl.replace(`{${param}}`, encodeURIComponent(val));
+                    if (val) finalUrl = finalUrl.replace(`{${param}}`, encodeURIComponent(val));
                 });
             }
 
@@ -331,7 +938,9 @@
             let fetchMethod = ep.method.toUpperCase();
             const options = {
                 method: fetchMethod,
-                headers: { 'Accept': 'application/json' }
+                headers: {
+                    'Accept': 'application/json'
+                }
             };
 
             if (token) {
@@ -393,7 +1002,7 @@
 
                     options.body = formData;
 
-                // === التعامل مع JSON العادي ===
+                    // === التعامل مع JSON العادي ===
                 } else {
                     const bodyObj = {};
                     if (ep.fields) {
@@ -403,8 +1012,11 @@
 
                             let val = input.value;
                             if (f.name === 'data' || (val && (val.startsWith('{') || val.startsWith('[')))) {
-                                try { val = JSON.parse(val); }
-                                catch(e) { console.warn(`Could not parse JSON for ${f.name}`); }
+                                try {
+                                    val = JSON.parse(val);
+                                } catch (e) {
+                                    console.warn(`Could not parse JSON for ${f.name}`);
+                                }
                             }
                             bodyObj[f.name] = val;
                         });
@@ -419,9 +1031,9 @@
                 const res = await fetch(finalUrl, options);
 
                 statusBox.textContent = res.status;
-                if(res.ok || res.status === 201) {
+                if (res.ok || res.status === 201) {
                     statusBox.className = "ml-2 px-2 py-0.5 rounded text-xs font-bold bg-green-600 text-white";
-                } else if(res.status === 422) {
+                } else if (res.status === 422) {
                     statusBox.className = "ml-2 px-2 py-0.5 rounded text-xs font-bold bg-yellow-500 text-white";
                 } else {
                     statusBox.className = "ml-2 px-2 py-0.5 rounded text-xs font-bold bg-red-600 text-white";
@@ -435,7 +1047,7 @@
                     responseBox.textContent = textData || "Empty Response from Server";
                 }
 
-            } catch(e) {
+            } catch (e) {
                 statusBox.textContent = "ERROR";
                 statusBox.className = "ml-2 px-2 py-0.5 rounded text-xs font-bold bg-red-600 text-white";
                 responseBox.textContent = "Network Error, CORS Issue, or Request Failed:\n" + e.toString();
@@ -447,14 +1059,14 @@
             const details = document.getElementById(`details-${index}`);
             const icon = document.getElementById(`icon-${index}`);
             details.classList.toggle('hidden');
-            if(details.classList.contains('hidden')){
+            if (details.classList.contains('hidden')) {
                 icon.style.transform = "rotate(0deg)";
             } else {
                 icon.style.transform = "rotate(180deg)";
             }
         }
 
-  window.onload = function() {
+        window.onload = function() {
             // 🌟 حل ذكي للتفرقة بين بيئة اللوكال وبيئة السيرفر المرفوع 🌟
             const baseUrlInput = document.getElementById('baseUrl');
             if (baseUrlInput) {
@@ -467,7 +1079,7 @@
                 // 2. إذا كنا شغالين لوكال وأنت تريد توجيه الطلبات للإنتاج (Production Server)
                 else {
                     // إذا كنت كاتب الرابط بـ http، نحوله فوراً إلى https لمنع مشكلة الـ Redirect وسقوط الـ Methods
-                    if (baseUrlInput.value.startsWith('http://fronsicai-production-6288.up.railway.app/')) {
+                    if (baseUrlInput.value.startsWith('https://fronsicso-production.up.railway.app/')) {
                         baseUrlInput.value = baseUrlInput.value.replace('http://', 'https://');
                     }
                 }
@@ -478,4 +1090,5 @@
         };
     </script>
 </body>
+
 </html>
