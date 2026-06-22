@@ -753,6 +753,8 @@
                 const cleanPath = ep.path.startsWith('/') ? ep.path : '/' + ep.path;
                 const initialFullUrl = baseUrl + cleanPath;
 
+
+
                 if (ep.group !== currentGroup) {
                     currentGroup = ep.group;
                     container.innerHTML +=
@@ -766,7 +768,7 @@
                         <div class="p-3 flex items-center justify-between cursor-pointer" onclick="toggleDetails(${index})">
                             <div class="flex items-center gap-4">
                                 <span class="badge text-white font-bold px-3 py-1 rounded w-20 text-center">${ep.method}</span>
-                                <span class="font-mono font-bold text-gray-200" id="endpoint-url-${index}">${initialFullUrl}</span>
+                                <span class="font-mono font-bold text-gray-200" id="endpoint-url-${index}">${ep.name}</span>
                                 <span class="text-gray-400 text-sm hidden md:inline-block">- ${ep.title}</span>
                             </div>
                             <i class="fas fa-chevron-down text-gray-400 transition-transform duration-200" id="icon-${index}"></i>
@@ -843,17 +845,17 @@
 
                 // Execute Button & Response Box
                 html += `
-                            <button onclick="executeRequest(${index})" class="w-full text-center bg-cyan-500 hover:bg-cyan-400 text-white px-6 py-2 rounded shadow-lg transition duration-200 font-semibold mb-4">
-                                Execute Request
-                            </button>
+                                <button onclick="executeRequest(${index})" class="w-full text-center bg-cyan-500 hover:bg-cyan-400 text-white px-6 py-2 rounded shadow-lg transition duration-200 font-semibold mb-4">
+                                    Execute Request
+                                </button>
 
-                            <div class="mt-4 border-t border-gray-700 pt-4">
-                                <h4 class="text-sm font-semibold text-gray-300 mb-2">Server Response <span id="status-${index}" class="ml-2 px-2 py-0.5 rounded text-xs font-bold bg-gray-700"></span></h4>
-                                <pre id="response-${index}" class="bg-darkBg p-4 rounded border border-gray-600 text-green-400 font-mono text-sm overflow-x-auto min-h-[100px] whitespace-pre-wrap">Waiting for execution...</pre>
+                                <div class="mt-4 border-t border-gray-700 pt-4">
+                                    <h4 class="text-sm font-semibold text-gray-300 mb-2">Server Response <span id="status-${index}" class="ml-2 px-2 py-0.5 rounded text-xs font-bold bg-gray-700"></span></h4>
+                                    <pre id="response-${index}" class="bg-darkBg p-4 rounded border border-gray-600 text-green-400 font-mono text-sm overflow-x-auto min-h-[100px] whitespace-pre-wrap">Waiting for execution...</pre>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                `;
+                        `;
 
                 container.innerHTML += html;
             });
@@ -926,7 +928,7 @@
             }
         }
 
-//  Dynamic Request Executor Engine (Optimized & Final Version)
+        //  Dynamic Request Executor Engine (Optimized & Final Version)
         async function executeRequest(index) {
             const ep = endpoints[index];
 
@@ -1021,7 +1023,7 @@
 
                     options.body = formData;
 
-                // === التعامل مع JSON العادي ===
+                    // === التعامل مع JSON العادي ===
                 } else {
                     const bodyObj = {};
                     if (ep.fields) {
