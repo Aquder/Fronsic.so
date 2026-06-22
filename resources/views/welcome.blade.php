@@ -725,6 +725,20 @@
             }
         ];
 
+        endpoints.forEach(ep => {
+            // نبحث عن كلمة api/ ونقص كل ما قبلها (لحذف أي دومين ملتصق بالمسار)
+            const apiIndex = ep.path.indexOf('api/');
+            if (apiIndex !== -1) {
+                ep.path = '/' + ep.path.substring(apiIndex);
+            } else {
+                // في حال عدم وجود كلمة api، نتأكد فقط أنه يبدأ بـ /
+                if (!ep.path.startsWith('/')) {
+                    ep.path = '/' + ep.path;
+                }
+            }
+        });
+
+
         function renderUI() {
             const container = document.getElementById('endpoints-container');
             container.innerHTML = '';
@@ -872,25 +886,22 @@
             const baseUrlInput = document.getElementById('baseUrl');
             if (!baseUrlInput) return;
 
-            // تنظيف الـ Base URL وإزالة أي Slash زائدة في النهاية
             let baseUrl = baseUrlInput.value.trim().replace(/\/$/, "");
 
             endpoints.forEach((ep, index) => {
-                // 1. تحديث الهيدر الخارجي ليكون المسار النسبي فقط (api/login)
+                // 1. الهيدر يعرض فقط المسار النسبي النظيف (مثال: /api/login)
                 const headUrlEl = document.getElementById(`endpoint-url-${index}`);
                 if (headUrlEl) {
                     headUrlEl.textContent = ep.path;
                 }
 
-                // 2. تحديث صندوق Request URL الداخلي ليكون الرابط كاملاً
+                // 2. صندوق Request URL الداخلي يعرض الرابط مدمجاً بشكل كامل وسليم
                 const detailUrlEl = document.getElementById(`url-text-${index}`);
                 if (detailUrlEl) {
-                    const cleanPath = ep.path.startsWith('/') ? ep.path : '/' + ep.path;
-                    detailUrlEl.textContent = baseUrl + cleanPath;
+                    detailUrlEl.textContent = baseUrl + ep.path;
                 }
             });
         }
-
         // Tabs Logic (DNA Analysis)
         function switchDnaTab(index, tab) {
             document.getElementById(`dna-active-tab-${index}`).value = tab;
@@ -915,11 +926,13 @@
             }
         }
 
-        // Dynamic Request Executor Engine (Optimized for Laravel Backend & DNA Analysis)
+//  Dynamic Request Executor Engine (Optimized & Final Version)
         async function executeRequest(index) {
             const ep = endpoints[index];
-            // تنظيف الـ baseUrl لضمان عدم وجود Slash زائدة في النهاية
-            const baseUrl = document.getElementById('baseUrl').value.replace(/\/$/, "");
+
+            // 1. تنظيف الـ baseUrl لضمان عدم وجود Slash زائدة في النهاية
+            const baseUrlInput = document.getElementById('baseUrl');
+            const baseUrl = baseUrlInput ? baseUrlInput.value.trim().replace(/\/$/, "") : "";
             const token = document.getElementById('globalToken').value;
             const responseBox = document.getElementById(`response-${index}`);
             const statusBox = document.getElementById(`status-${index}`);
@@ -928,8 +941,10 @@
             statusBox.textContent = "WAITING";
             statusBox.className = "ml-2 px-2 py-0.5 rounded text-xs font-bold bg-yellow-600 text-white";
 
-            // 1. بناء مسار الرابط النهائي
-            let finalUrl = baseUrl + (ep.path.startsWith('/') ? ep.path : '/' + ep.path);
+            // 2. بناء مسار الرابط النهائي بذكاء
+            const cleanPath = ep.path.startsWith('/') ? ep.path : '/' + ep.path;
+            let finalUrl = baseUrl + cleanPath;
+
             if (ep.hasParams && ep.params) {
                 ep.params.forEach(param => {
                     const el = document.getElementById(`param-${index}-${param}`);
@@ -938,7 +953,7 @@
                 });
             }
 
-            // 2. إعدادات الطلب الأساسية (Headers & Method)
+            // 3. إعدادات الطلب الأساسية (Headers & Method)
             let fetchMethod = ep.method.toUpperCase();
             const options = {
                 method: fetchMethod,
@@ -951,7 +966,7 @@
                 options.headers['Authorization'] = `Bearer ${token}`;
             }
 
-            // 3. تجهيز البيانات (Payload)
+            // 4. تجهيز البيانات (Payload)
             if (fetchMethod !== 'GET' && fetchMethod !== 'HEAD') {
 
                 let hasFile = false;
@@ -963,7 +978,7 @@
                 if (hasFile || ep.bodyType === 'formdata' || ep.isDnaAnalysis) {
                     const formData = new FormData();
 
-                    // دعم ملفات الـ PUT/PATCH عبر الـ Method Spoofing
+                    // دعم ملفات الـ PUT/PATCH عبر الـ Method Spoofing الخاص بـ Laravel
                     if (fetchMethod === 'PUT' || fetchMethod === 'PATCH') {
                         options.method = 'POST';
                         formData.append('_method', fetchMethod);
@@ -988,7 +1003,7 @@
                     // 🧬 معالجة حقول الـ DNA Analysis بأعلى دقة 🧬
                     if (ep.isDnaAnalysis) {
                         const activeTabEl = document.getElementById(`dna-active-tab-${index}`);
-                        // إذا لم يجد العنصر، يفترض افتراضياً أننا في تاب الـ sequence
+                        // الافتراضي هو sequence في حال لم نجد العنصر
                         const activeTab = activeTabEl ? activeTabEl.value : 'sequence';
 
                         if (activeTab === 'sequence') {
@@ -1006,7 +1021,7 @@
 
                     options.body = formData;
 
-                    // === التعامل مع JSON العادي ===
+                // === التعامل مع JSON العادي ===
                 } else {
                     const bodyObj = {};
                     if (ep.fields) {
@@ -1030,15 +1045,14 @@
                 }
             }
 
-            // 4. تنفيذ الطلب (Execution & Error Handling)
-            // 4. تنفيذ الطلب (Execution & Error Handling)
+            // 5. تنفيذ الطلب (Execution & Error Handling)
             try {
                 const res = await fetch(finalUrl, options);
 
                 statusBox.textContent = res.status;
                 if (res.ok || res.status === 201) {
                     statusBox.className = "ml-2 px-2 py-0.5 rounded text-xs font-bold bg-green-600 text-white";
-                } else if (res.status === 422) {
+                } else if (res.status === 422) { // 422 Unprocessable Entity (Laravel Validation Error)
                     statusBox.className = "ml-2 px-2 py-0.5 rounded text-xs font-bold bg-yellow-500 text-white";
                 } else {
                     statusBox.className = "ml-2 px-2 py-0.5 rounded text-xs font-bold bg-red-600 text-white";
@@ -1058,7 +1072,6 @@
                 responseBox.textContent = "Network Error, CORS Issue, or Request Failed:\n" + e.toString();
             }
         }
-
 
         function toggleDetails(index) {
             const details = document.getElementById(`details-${index}`);
