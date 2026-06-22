@@ -36,7 +36,7 @@ class UserController extends Controller
             'phone_number'  => ['required', 'numeric', 'digits:11'],
             'national_id'   => ['required', 'numeric','digits:14', Rule::unique('users')->ignore($user->id)],
             'date_of_birth' => ['required', 'date'],
-            'image'         => ['required','image' ,'max:2048'],
+            'image'         => ['nullable', 'image' ,'max:2048'],
         ]);
 
         $user->name = $validatedData['first_name'] . ' ' . $validatedData['last_name'];
