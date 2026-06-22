@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('image')->nullable(true);
-            $table->string('phone_number');
-            $table->string('national_id')->unique();
+            $table->string('phone_number')->nullable(true);
+            $table->string('national_id')->unique()->nullable(true);
             $table->string('email')->unique();
-            $table->date('date_of_birth');
+            $table->date('date_of_birth')->nullable(true);
             $table->enum('status',['active','block'])->default('active');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
