@@ -18,10 +18,14 @@ class RoleMiddleware
             ], 401);
         }
 
-        if (!in_array(
-            strtolower($user->role),
-            array_map('strtolower', $roles)
-        )) {
+        /*
+         * Admin can access everything
+         */
+        if ($user->role === 'admin') {
+            return $next($request);
+        }
+
+        if (!in_array($user->role, $roles)) {
             return response()->json([
                 'message' => 'Forbidden'
             ], 403);

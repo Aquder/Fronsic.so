@@ -69,7 +69,7 @@
     <div class="max-w-6xl mx-auto mb-10">
         <div class="flex justify-between items-center border-b border-gray-700 pb-4 mb-6">
             <div>
-                <h1 class="text-3xl font-bold text-white tracking-wide">Welcome Forensic AI API <span
+                <h1 class="text-3xl font-bold text-white tracking-wide">Forensic AI API <span
                         class="text-primary text-lg font-normal">v1.0 (Workspace by Ahmed Quder)</span></h1>
                 <p class="text-gray-400 mt-1">Interactive API documentation & testing interface.</p>
             </div>
@@ -79,7 +79,7 @@
             class="bg-cardBg p-5 rounded-lg border border-gray-700 shadow-lg flex flex-col md:flex-row gap-4 items-end">
             <div class="flex-1 w-full" style="display: none;">
                 <label class="block text-sm text-gray-400 mb-1">Base URL</label>
-                <input type="text" id="baseUrl" value="https://fronsicso-production.up.railway.app/"
+                <input type="text" id="baseUrl" value="https://fronsicai-production-6288.up.railway.app/"
                     oninput="updateAllUrls()"
                     class="w-full bg-darkBg border border-gray-600 rounded p-2 text-white outline-none focus:border-primary">
             </div>
@@ -725,36 +725,12 @@
             }
         ];
 
-        endpoints.forEach(ep => {
-            // نبحث عن كلمة api/ ونقص كل ما قبلها (لحذف أي دومين ملتصق بالمسار)
-            const apiIndex = ep.path.indexOf('api/');
-            if (apiIndex !== -1) {
-                ep.path = '/' + ep.path.substring(apiIndex);
-            } else {
-                // في حال عدم وجود كلمة api، نتأكد فقط أنه يبدأ بـ /
-                if (!ep.path.startsWith('/')) {
-                    ep.path = '/' + ep.path;
-                }
-            }
-        });
-
-
         function renderUI() {
             const container = document.getElementById('endpoints-container');
             container.innerHTML = '';
             let currentGroup = '';
 
-            // 🌟 استخراج الرابط الأساسي وتنظيفه لضمان دمج سليم
-            const baseUrlInput = document.getElementById('baseUrl');
-            let baseUrl = baseUrlInput ? baseUrlInput.value.trim().replace(/\/$/, "") : "";
-
             endpoints.forEach((ep, index) => {
-                // 🌟 تطبيق التعديل الذكي لضبط مسار الـ Endpoint
-                const cleanPath = ep.path.startsWith('/') ? ep.path : '/' + ep.path;
-                const initialFullUrl = baseUrl + cleanPath;
-
-
-
                 if (ep.group !== currentGroup) {
                     currentGroup = ep.group;
                     container.innerHTML +=
@@ -768,7 +744,7 @@
                         <div class="p-3 flex items-center justify-between cursor-pointer" onclick="toggleDetails(${index})">
                             <div class="flex items-center gap-4">
                                 <span class="badge text-white font-bold px-3 py-1 rounded w-20 text-center">${ep.method}</span>
-                                <span class="font-mono font-bold text-gray-200" id="endpoint-url-${index}">${ep.name}</span>
+                                <span class="font-mono font-bold text-gray-200">${ep.path}</span>
                                 <span class="text-gray-400 text-sm hidden md:inline-block">- ${ep.title}</span>
                             </div>
                             <i class="fas fa-chevron-down text-gray-400 transition-transform duration-200" id="icon-${index}"></i>
@@ -778,7 +754,7 @@
 
                             <div class="mb-5 bg-darkBg border border-gray-700 rounded p-3">
                                 <label class="block text-xs font-semibold text-gray-400 mb-1">Request URL</label>
-                                <div id="url-text-${index}" class="text-sm font-mono text-primary break-all">${initialFullUrl}</div>
+                                <div id="url-text-${index}" class="text-sm font-mono text-primary break-all"></div>
                             </div>
 
                             <h3 class="text-sm font-semibold text-gray-300 mb-4 border-b border-gray-700 pb-2">Parameters & Request Body</h3>
@@ -810,7 +786,7 @@
 
                             <div id="tab-content-seq-${index}" class="block">
                                 <label class="block text-sm text-gray-400 mb-1">Sequence Data Input:</label>
-                                <textarea name="sequance" id="dna-seq-${index}" rows="4" class="w-full bg-cardBg border border-gray-600 rounded p-2 text-white outline-none focus:border-primary" placeholder="Paste DNA sequences or allele values here..."></textarea>
+                                <textarea name"sequance" id="dna-seq-${index}" rows="4" class="w-full bg-cardBg border border-gray-600 rounded p-2 text-white outline-none focus:border-primary" placeholder="Paste DNA sequences or allele values here..."></textarea>
                             </div>
 
                             <div id="tab-content-file-${index}" class="hidden">
@@ -845,17 +821,17 @@
 
                 // Execute Button & Response Box
                 html += `
-                                <button onclick="executeRequest(${index})" class="w-full text-center bg-cyan-500 hover:bg-cyan-400 text-white px-6 py-2 rounded shadow-lg transition duration-200 font-semibold mb-4">
-                                    Execute Request
-                                </button>
+                            <button onclick="executeRequest(${index})" class="w-full text-center bg-cyan-500 hover:bg-cyan-400 text-white px-6 py-2 rounded shadow-lg transition duration-200 font-semibold mb-4">
+                                Execute Request
+                            </button>
 
-                                <div class="mt-4 border-t border-gray-700 pt-4">
-                                    <h4 class="text-sm font-semibold text-gray-300 mb-2">Server Response <span id="status-${index}" class="ml-2 px-2 py-0.5 rounded text-xs font-bold bg-gray-700"></span></h4>
-                                    <pre id="response-${index}" class="bg-darkBg p-4 rounded border border-gray-600 text-green-400 font-mono text-sm overflow-x-auto min-h-[100px] whitespace-pre-wrap">Waiting for execution...</pre>
-                                </div>
+                            <div class="mt-4 border-t border-gray-700 pt-4">
+                                <h4 class="text-sm font-semibold text-gray-300 mb-2">Server Response <span id="status-${index}" class="ml-2 px-2 py-0.5 rounded text-xs font-bold bg-gray-700"></span></h4>
+                                <pre id="response-${index}" class="bg-darkBg p-4 rounded border border-gray-600 text-green-400 font-mono text-sm overflow-x-auto min-h-[100px] whitespace-pre-wrap">Waiting for execution...</pre>
                             </div>
                         </div>
-                        `;
+                    </div>
+                `;
 
                 container.innerHTML += html;
             });
@@ -883,27 +859,10 @@
             }
         }
 
-        // 🌐 دالة تحديث الروابط في الواجهة بأعلى كفاءة لمنع التصاق النصوص
         function updateAllUrls() {
-            const baseUrlInput = document.getElementById('baseUrl');
-            if (!baseUrlInput) return;
-
-            let baseUrl = baseUrlInput.value.trim().replace(/\/$/, "");
-
-            endpoints.forEach((ep, index) => {
-                // 1. الهيدر يعرض فقط المسار النسبي النظيف (مثال: /api/login)
-                const headUrlEl = document.getElementById(`endpoint-url-${index}`);
-                if (headUrlEl) {
-                    headUrlEl.textContent = ep.path;
-                }
-
-                // 2. صندوق Request URL الداخلي يعرض الرابط مدمجاً بشكل كامل وسليم
-                const detailUrlEl = document.getElementById(`url-text-${index}`);
-                if (detailUrlEl) {
-                    detailUrlEl.textContent = baseUrl + ep.path;
-                }
-            });
+            endpoints.forEach((_, idx) => updateLiveUrl(idx));
         }
+
         // Tabs Logic (DNA Analysis)
         function switchDnaTab(index, tab) {
             document.getElementById(`dna-active-tab-${index}`).value = tab;
@@ -928,13 +887,12 @@
             }
         }
 
-        //  Dynamic Request Executor Engine (Optimized & Final Version)
+        // Dynamic Request Executor Engine (Optimized for Laravel Backend)
+        // Dynamic Request Executor Engine (Optimized for Laravel Backend & DNA Analysis)
         async function executeRequest(index) {
             const ep = endpoints[index];
-
-            // 1. تنظيف الـ baseUrl لضمان عدم وجود Slash زائدة في النهاية
-            const baseUrlInput = document.getElementById('baseUrl');
-            const baseUrl = baseUrlInput ? baseUrlInput.value.trim().replace(/\/$/, "") : "";
+            // تنظيف الـ baseUrl لضمان عدم وجود Slash زائدة في النهاية
+            const baseUrl = document.getElementById('baseUrl').value.replace(/\/$/, "");
             const token = document.getElementById('globalToken').value;
             const responseBox = document.getElementById(`response-${index}`);
             const statusBox = document.getElementById(`status-${index}`);
@@ -943,10 +901,8 @@
             statusBox.textContent = "WAITING";
             statusBox.className = "ml-2 px-2 py-0.5 rounded text-xs font-bold bg-yellow-600 text-white";
 
-            // 2. بناء مسار الرابط النهائي بذكاء
-            const cleanPath = ep.path.startsWith('/') ? ep.path : '/' + ep.path;
-            let finalUrl = baseUrl + cleanPath;
-
+            // 1. بناء مسار الرابط النهائي
+            let finalUrl = baseUrl + (ep.path.startsWith('/') ? ep.path : '/' + ep.path);
             if (ep.hasParams && ep.params) {
                 ep.params.forEach(param => {
                     const el = document.getElementById(`param-${index}-${param}`);
@@ -955,7 +911,7 @@
                 });
             }
 
-            // 3. إعدادات الطلب الأساسية (Headers & Method)
+            // 2. إعدادات الطلب الأساسية (Headers & Method)
             let fetchMethod = ep.method.toUpperCase();
             const options = {
                 method: fetchMethod,
@@ -968,7 +924,7 @@
                 options.headers['Authorization'] = `Bearer ${token}`;
             }
 
-            // 4. تجهيز البيانات (Payload)
+            // 3. تجهيز البيانات (Payload)
             if (fetchMethod !== 'GET' && fetchMethod !== 'HEAD') {
 
                 let hasFile = false;
@@ -980,7 +936,7 @@
                 if (hasFile || ep.bodyType === 'formdata' || ep.isDnaAnalysis) {
                     const formData = new FormData();
 
-                    // دعم ملفات الـ PUT/PATCH عبر الـ Method Spoofing الخاص بـ Laravel
+                    // دعم ملفات الـ PUT/PATCH عبر الـ Method Spoofing
                     if (fetchMethod === 'PUT' || fetchMethod === 'PATCH') {
                         options.method = 'POST';
                         formData.append('_method', fetchMethod);
@@ -1005,7 +961,7 @@
                     // 🧬 معالجة حقول الـ DNA Analysis بأعلى دقة 🧬
                     if (ep.isDnaAnalysis) {
                         const activeTabEl = document.getElementById(`dna-active-tab-${index}`);
-                        // الافتراضي هو sequence في حال لم نجد العنصر
+                        // إذا لم يجد العنصر، يفترض افتراضياً أننا في تاب الـ sequence
                         const activeTab = activeTabEl ? activeTabEl.value : 'sequence';
 
                         if (activeTab === 'sequence') {
@@ -1047,14 +1003,14 @@
                 }
             }
 
-            // 5. تنفيذ الطلب (Execution & Error Handling)
+            // 4. تنفيذ الطلب (Execution & Error Handling)
             try {
                 const res = await fetch(finalUrl, options);
 
                 statusBox.textContent = res.status;
                 if (res.ok || res.status === 201) {
                     statusBox.className = "ml-2 px-2 py-0.5 rounded text-xs font-bold bg-green-600 text-white";
-                } else if (res.status === 422) { // 422 Unprocessable Entity (Laravel Validation Error)
+                } else if (res.status === 422) {
                     statusBox.className = "ml-2 px-2 py-0.5 rounded text-xs font-bold bg-yellow-500 text-white";
                 } else {
                     statusBox.className = "ml-2 px-2 py-0.5 rounded text-xs font-bold bg-red-600 text-white";
@@ -1074,6 +1030,7 @@
                 responseBox.textContent = "Network Error, CORS Issue, or Request Failed:\n" + e.toString();
             }
         }
+
 
         function toggleDetails(index) {
             const details = document.getElementById(`details-${index}`);
@@ -1099,7 +1056,7 @@
                 // 2. إذا كنا شغالين لوكال وأنت تريد توجيه الطلبات للإنتاج (Production Server)
                 else {
                     // إذا كنت كاتب الرابط بـ http، نحوله فوراً إلى https لمنع مشكلة الـ Redirect وسقوط الـ Methods
-                    if (baseUrlInput.value.startsWith('https://fronsicso-production.up.railway.app/')) {
+                    if (baseUrlInput.value.startsWith('http://fronsicai-production-6288.up.railway.app/')) {
                         baseUrlInput.value = baseUrlInput.value.replace('http://', 'https://');
                     }
                 }
