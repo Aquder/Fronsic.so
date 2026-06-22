@@ -48,7 +48,7 @@
         <div class="bg-cardBg p-5 rounded-lg border border-gray-700 shadow-lg flex flex-col md:flex-row gap-4 items-end">
             <div class="flex-1 w-full" style="display: none;">
                 <label class="block text-sm text-gray-400 mb-1">Base URL</label>
-                <input type="text" id="baseUrl" value="http://fronsicai-production-6288.up.railway.app/"  oninput="updateAllUrls()" class="w-full bg-darkBg border border-gray-600 rounded p-2 text-white outline-none focus:border-primary">
+                <input type="text" id="baseUrl" value="https://fronsicai-production-6288.up.railway.app/"  oninput="updateAllUrls()" class="w-full bg-darkBg border border-gray-600 rounded p-2 text-white outline-none focus:border-primary">
             </div>
             <div class="flex-1 w-full">
                 <label class="block text-sm text-gray-400 mb-1">Authorization (Bearer Token)</label>
@@ -454,7 +454,25 @@
             }
         }
 
-        window.onload = function() {
+  window.onload = function() {
+            // 🌟 حل ذكي للتفرقة بين بيئة اللوكال وبيئة السيرفر المرفوع 🌟
+            const baseUrlInput = document.getElementById('baseUrl');
+            if (baseUrlInput) {
+                const currentHostname = window.location.hostname;
+
+                // 1. إذا كنا على السيرفر الفعلي المرفوع أونلاين
+                if (currentHostname !== 'localhost' && currentHostname !== '127.0.0.1') {
+                    baseUrlInput.value = window.location.origin;
+                }
+                // 2. إذا كنا شغالين لوكال وأنت تريد توجيه الطلبات للإنتاج (Production Server)
+                else {
+                    // إذا كنت كاتب الرابط بـ http، نحوله فوراً إلى https لمنع مشكلة الـ Redirect وسقوط الـ Methods
+                    if (baseUrlInput.value.startsWith('http://fronsicai-production-6288.up.railway.app/')) {
+                        baseUrlInput.value = baseUrlInput.value.replace('http://', 'https://');
+                    }
+                }
+            }
+
             renderUI();
             updateAllUrls();
         };
