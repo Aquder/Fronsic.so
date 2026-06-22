@@ -39,14 +39,20 @@ Route::post('/auth/google/callback', [GoogleAuthController::class, 'handleGoogle
 Route::get('view-article/{post_id}', [PostController::class, 'show']);
 Route::get('view-feeds/{post_id}', [PostController::class, 'show'])->name("viewfeed");
 
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware([
+    'auth:sanctum',
+    'status'
+])->group(function () {
     Route::apiResource('contacts', ContactController::class);
     Route::post('/logout', [AuthController::class, 'logout']);
-
 });
 
 
-Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+Route::middleware([
+    'auth:sanctum',
+    'status',
+    'role:admin'
+])->group(function () {
     // 1. Dashboard Page
     Route::get('admin/dashboard', [AdminPanalController::class, 'dashboard']);
 
@@ -80,7 +86,12 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
 });
 
 
-Route::middleware(['auth:sanctum', 'role:doctor'])->group(function () {
+Route::middleware([
+    'auth:sanctum',
+    'status',
+    'role:doctor'
+])->group(function () {
+    Route::get('/doctor/dashboard', [DashboardController::class, 'index']);
     // flutter
 
     Route::get('/doctor/dashboard-flutter', [DashboardController::class, 'DashboardFlutter']);
@@ -89,7 +100,6 @@ Route::middleware(['auth:sanctum', 'role:doctor'])->group(function () {
     Route::get('/doctor/dashboard-flutter/evidence-list', [DashboardController::class, 'EvidenceList']);
 
     // dashboard web
-    Route::get('/doctor/dashboard', [DashboardController::class, 'index']);
 
     // use-case
     Route::get('all-cases', [CaseController::class, 'index']);
@@ -105,10 +115,10 @@ Route::middleware(['auth:sanctum', 'role:doctor'])->group(function () {
     Route::delete('delete-evidence/{evidence}/use-case/{usecase}', [EvidenceController::class, 'destroy']);
 
     //models AI
-    Route::post('/face-recognation', [FaceRecogController::class, 'store']);
-    Route::post('/deep-fake', [DeepFakeController::class, 'store']);
-    Route::post('/dna-analysis', [DnaController::class, 'processSequence']);
-    Route::post('/face-reconstructs', [FacePredictionController::class, 'processFace']);
+    Route::post('/face-recognation', [FaceRecogController::class, 'store'])->name("model_ai");
+    Route::post('/deep-fake', [DeepFakeController::class, 'store'])->name("model_ai");
+    Route::post('/dna-analysis', [DnaController::class, 'processSequence'])->name("model_ai");
+    Route::post('/face-reconstructs', [FacePredictionController::class, 'processFace'])->name("model_ai");
 
     // chat
     Route::get('/chat', [ChatController::class, 'getConversations']);

@@ -48,11 +48,24 @@ class DnaController extends Controller {
         $model = model_ai::create( [
             'models'=>'dna model'
         ] );
+
+        // if ( $request->route()->getName() !== 'model_ai' ) {
+        //     return [
+        //         'model_used'=>$model->models,
+
+        //         'phenotypes'  => [
+        //             'eye_color'  => $bestEyeColor,
+        //             'hair_color' => $bestHairColor,
+        //             'skin_color' => $bestSkinColor,
+        //             'ancestry'   => $bestAncestry,
+        //         ]
+        //     ];
+        // }
         return response()->json( [
             'status'  => 'success',
             'message' => 'Analysis completed successfully.',
             'data'    => [
-            'model_used'=>$model->models,
+                'model_used'=>$model->models,
 
                 'phenotypes'  => [
                     'eye_color'  => $bestEyeColor,

@@ -876,16 +876,21 @@
             let baseUrl = baseUrlInput.value.trim().replace(/\/$/, "");
 
             endpoints.forEach((ep, index) => {
-                const urlEl = document.getElementById(`endpoint-url-${index}`);
-                if (urlEl) {
-                    // التأكد من أن مسار الـ endpoint يبدأ بـ Slash واحدة دائماً
-                    const cleanPath = ep.path.startsWith('/') ? ep.path : '/' + ep.path;
+                // 1. تحديث الهيدر الخارجي ليكون المسار النسبي فقط (api/login)
+                const headUrlEl = document.getElementById(`endpoint-url-${index}`);
+                if (headUrlEl) {
+                    headUrlEl.textContent = ep.path;
+                }
 
-                    // دمج الرابط النهائي بشكل سليم 100%
-                    urlEl.textContent = baseUrl + cleanPath;
+                // 2. تحديث صندوق Request URL الداخلي ليكون الرابط كاملاً
+                const detailUrlEl = document.getElementById(`url-text-${index}`);
+                if (detailUrlEl) {
+                    const cleanPath = ep.path.startsWith('/') ? ep.path : '/' + ep.path;
+                    detailUrlEl.textContent = baseUrl + cleanPath;
                 }
             });
         }
+
         // Tabs Logic (DNA Analysis)
         function switchDnaTab(index, tab) {
             document.getElementById(`dna-active-tab-${index}`).value = tab;
@@ -910,7 +915,6 @@
             }
         }
 
-        // Dynamic Request Executor Engine (Optimized for Laravel Backend)
         // Dynamic Request Executor Engine (Optimized for Laravel Backend & DNA Analysis)
         async function executeRequest(index) {
             const ep = endpoints[index];
@@ -1026,6 +1030,7 @@
                 }
             }
 
+            // 4. تنفيذ الطلب (Execution & Error Handling)
             // 4. تنفيذ الطلب (Execution & Error Handling)
             try {
                 const res = await fetch(finalUrl, options);

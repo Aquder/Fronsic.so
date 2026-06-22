@@ -6,9 +6,9 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class RoleMiddleware
+class StatusMiddleware
 {
-    public function handle(Request $request, Closure $next, ...$roles): Response
+    public function handle(Request $request, Closure $next): Response
     {
         $user = $request->user();
 
@@ -18,12 +18,12 @@ class RoleMiddleware
             ], 401);
         }
 
-        if (!in_array(
-            strtolower($user->role),
-            array_map('strtolower', $roles)
-        )) {
+        if ($user->status === 'block') {
+
+            $user->tokens()->delete();
+
             return response()->json([
-                'message' => 'Forbidden'
+                'message' => 'Your account has been blocked. Please contact support.'
             ], 403);
         }
 
