@@ -82,7 +82,7 @@ class DashboardController extends Controller
             })
             ->orderBy('created_at', 'desc')
             ->take(20)
-            ->get(['id', 'name', 'model_used', 'case_id', 'created_at']);
+            ->get(['id', 'name', 'case_id', 'created_at']);
 
         return response()->json([
             'status' => 'success',
@@ -224,7 +224,7 @@ class DashboardController extends Controller
             })
             ->orderBy('created_at', 'desc')
             ->take(20)
-            ->get(['id', 'name', 'model_used', 'case_id', 'created_at']);
+            ->get(['id', 'name',  'case_id', 'created_at']);
 
                 return response()->json([
                     'status' => 'success',
