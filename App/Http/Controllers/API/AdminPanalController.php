@@ -54,9 +54,12 @@ class AdminPanalController extends Controller {
     public function doctors() {
         $doctors = User::where( 'role', 'doctor' )->select( 'id', 'name', 'national_id', 'created_at', 'status' )
         ->paginate( 10 );
+        $Admin = User::where( 'role', 'admin' )->select( 'id', 'name', 'email', 'created_at', 'status' )
+        ->paginate( 10 );
         return response()->json( [
             'status' => true,
-            'data' => $doctors
+            'doctors' => $doctors,
+            'admins' => $Admin
         ] );
     }
 

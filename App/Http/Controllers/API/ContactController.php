@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ContactResource;
 use App\Models\Contact;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ContactController extends Controller
@@ -79,6 +80,7 @@ class ContactController extends Controller
         $validated = validator($request->all(), [
             'name' => 'required|string|min:3',
             'email' => 'required|email',
+            'phone_number' => 'required',
             'message' => 'required|min:7|max:2000',
         ]);
 
@@ -180,12 +182,17 @@ class ContactController extends Controller
     public function destroy($id): JsonResponse
     {
         $contact = Contact::find($id);
-
         if (!$contact) {
             return response()->json([
                 'success' => false,
                 'msg' => 'Contact not found'
             ], 404);
+        }
+
+        if ( Auth::user()->role == 'admin' ) {
+            $systemlog = new SystemLoglController();
+            $massage = 'Admin '.Auth::user()->name.'delete this contact for this user :'.$contact->email ." where contact : " .$contact->message;
+            $systemlog->store( $massage );
         }
 
         $contact->delete();
