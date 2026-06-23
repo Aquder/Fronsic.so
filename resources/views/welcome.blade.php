@@ -593,27 +593,8 @@
                     type: 'file'
                 }]
             },
-            {
-                method: 'POST',
-                path: 'api/contacts',
-                title: 'Contact page create ',
-                group: 'Contact Bage',
-                fields: [{
-                    name: 'name',
-                    type: 'text'
-                }, {
-                    name: 'email',
-                    type: 'email'
-                }, {
-                    name: 'phone_number',
-                    type: 'text'
-                }, {
-                    name: 'message',
-                    type: 'text'
-                }]
-            },
+
             // --- 8. user setting ---
-            
             {
                 method: 'GET',
                 path: 'api/setting',
@@ -741,21 +722,6 @@
                 group: 'Admin Panel',
                 hasParams: true,
                 params: ['id']
-            }
-            {
-                method: 'GET',
-                path: 'api/contacts',
-                title: 'Contact manger',
-                group: 'Admin Panel',
-                hasParams: false,
-            }
-            {
-                method: 'DELETE',
-                path: 'api/contacts/{contact}',
-                title: 'Delete Contact',
-                group: 'Admin Panel',
-                hasParams: true,
-                params: ['contact']
             }
         ];
 
