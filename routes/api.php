@@ -43,7 +43,7 @@ Route::middleware([
     'auth:sanctum',
     'status'
 ])->group(function () {
-    Route::apiResource('contacts', ContactController::class);
+    Route::apiResource('contacts', ContactController::class)->only(['store']);
     Route::post('/logout', [AuthController::class, 'logout']);
 });
 
@@ -53,6 +53,8 @@ Route::middleware([
     'status',
     'role:admin'
 ])->group(function () {
+    Route::apiResource('contacts', ContactController::class)->except(['store']);
+
     // 1. Dashboard Page
     Route::get('admin/dashboard', [AdminPanalController::class, 'dashboard']);
 
