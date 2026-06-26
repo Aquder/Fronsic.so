@@ -8,11 +8,9 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\ResetPasswordOtpMail;
+use Illuminate\Support\Facades\Http;
 
 class AuthController extends Controller {
-
 
     public function ChangeData( Request $request ) {
 
@@ -34,12 +32,12 @@ class AuthController extends Controller {
                 'data' => $validatedData->errors()
             ], 422 );
         }
-        if ($user->email != $request->email) {
+        if ( $user->email != $request->email ) {
             $validatedData = validator( $request->all(), [
                 'email' => 'unique:users',
             ] );
         }
-        if ($user->national_id != $request->national_id) {
+        if ( $user->national_id != $request->national_id ) {
             $validatedData = validator( $request->all(), [
                 'national_id' => 'unique:users',
             ] );
@@ -54,7 +52,8 @@ class AuthController extends Controller {
         }
         $imagePath = null;
         if ( $request->hasFile( 'image' ) ) {
-                $imagePath = $request->file( 'image' )->store( 'users', 'public' );;
+            $imagePath = $request->file( 'image' )->store( 'users', 'public' );
+            ;
         }
 
         $user->update( [
@@ -72,6 +71,7 @@ class AuthController extends Controller {
             'user' => new UserResource( $user ),
         ] );
     }
+
     public function register( Request $request ) {
 
         $validatedData = validator( $request->all(), [
@@ -139,13 +139,63 @@ class AuthController extends Controller {
 
         $otp = rand( 100000, 999999 );
 
-        Cache::put( 'reset_otp_' . $request->email, $otp, now()->addSeconds( 120 ) );
+        Cache::put(
+            'reset_otp_' . $request->email,
+            $otp,
+            now()->addSeconds( 120 )
+        );
 
-        Mail::to( $request->email )->send( new ResetPasswordOtpMail( $otp ) );
+        $response = Http::withHeaders( [
+            'accept' => 'application/json',
+            'api-key' => env( 'BREVO_API_KEY' ),
+            'content-type' => 'application/json',
+        ] )->post( 'https://api.brevo.com/v3/smtp/email', [
+
+            'sender' => [
+                'name'  => env( 'BREVO_SENDER_NAME' ),
+                'email' => env( 'BREVO_SENDER_EMAIL' ),
+            ],
+
+            'to' => [
+                [
+                    'email' => $request->email,
+                ]
+            ],
+
+            'subject' => 'Forensic AI - Password Reset Code',
+
+            'htmlContent' => "
+            <div style='font-family:Arial,sans-serif;padding:20px'>
+                <h2>Password Reset</h2>
+
+                <p>Your verification code is:</p>
+
+                <h1 style='font-size:40px;color:#2563eb'>
+                    {$otp}
+                </h1>
+
+                <p>
+                    This code will expire in
+                    <strong>2 minutes</strong>.
+                </p>
+            </div>
+        "
+
+        ] );
+
+        if ( !$response->successful() ) {
+
+            return response()->json( [
+                'status' => 0,
+                'message' => 'Failed to send email.',
+                'error' => $response->json()
+            ], 500 );
+
+        }
 
         return response()->json( [
-            'status' => 1,
-            'msg' => 'Verification code sent successfully to your email.'
+            'status' => 12,
+            'msg' => 'Verification code sent successfully to your email .'
         ] );
     }
 
@@ -206,13 +256,13 @@ class AuthController extends Controller {
         ] );
     }
 
-    public function logout(Request $request){
+    public function logout( Request $request ) {
 
         $request->user()->tokens()->delete();
-        return response()->json([
+        return response()->json( [
             'status' => 1,
             'msg' => 'Logout successfully.'
-        ]);
+        ] );
     }
 
     public function uploadImage( Request $request ) {
