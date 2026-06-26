@@ -109,8 +109,7 @@ border:2px dashed #2563eb;
 color:#1d4ed8;
 ">
 
-                                    {$otp}
-
+{{$otp}}
                                 </div>
 
                             </div>
