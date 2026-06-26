@@ -134,7 +134,7 @@ class AuthController extends Controller {
 
     public function sendResetCode( Request $request ) {
         $request->validate( [
-            'email' => 'required|email|exists:users,email'
+            'email' => 'required|email|exists:users,email',
         ] );
 
         $otp = rand( 100000, 999999 );
@@ -164,38 +164,23 @@ class AuthController extends Controller {
 
             'subject' => 'Forensic AI - Password Reset Code',
 
-            'htmlContent' => "
-            <div style='font-family:Arial,sans-serif;padding:20px'>
-                <h2>Password Reset</h2>
-
-                <p>Your verification code is:</p>
-
-                <h1 style='font-size:40px;color:#2563eb'>
-                    {$otp}
-                </h1>
-
-                <p>
-                    This code will expire in
-                    <strong>2 minutes</strong>.
-                </p>
-            </div>
-        "
+            'htmlContent' => view( 'emails.reset_password_otp', [
+                'otp' => $otp,
+            ] )->render(),
 
         ] );
 
         if ( !$response->successful() ) {
-
             return response()->json( [
                 'status' => 0,
-                'message' => 'Failed to send email.',
-                'error' => $response->json()
+                'msg' => 'Failed to send verification code.',
+                'error' => $response->json(),
             ], 500 );
-
         }
 
         return response()->json( [
-            'status' => 12,
-            'msg' => 'Verification code sent successfully to your email .'
+            'status' => 1,
+            'msg' => 'Verification code sent successfully to your email.',
         ] );
     }
 
