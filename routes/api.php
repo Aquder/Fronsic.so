@@ -34,8 +34,7 @@ Route::post('/password/forgot', [AuthController::class, 'sendResetCode']);
 Route::post('/password/verify-code', [AuthController::class, 'verifyCode']);
 Route::post('/password/reset', [AuthController::class, 'resetPassword']);
 Route::post('/auth/google/callback', [GoogleAuthController::class, 'handleGoogleLogin']);
-
-
+Route::apiResource('contacts', ContactController::class)->only(['store']);
 Route::get('view-article/{post_id}', [PostController::class, 'show']);
 Route::get('view-feeds/{post_id}', [PostController::class, 'show'])->name("viewfeed");
 
@@ -43,7 +42,6 @@ Route::middleware([
     'auth:sanctum',
     'status'
 ])->group(function () {
-    Route::apiResource('contacts', ContactController::class)->only(['store']);
     Route::post('/logout', [AuthController::class, 'logout']);
 });
 
