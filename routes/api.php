@@ -37,6 +37,8 @@ Route::post('/auth/google/callback', [GoogleAuthController::class, 'handleGoogle
 Route::apiResource('contacts', ContactController::class)->only(['store']);
 Route::get('view-article/{post_id}', [PostController::class, 'show']);
 Route::get('view-feeds/{post_id}', [PostController::class, 'show'])->name("viewfeed");
+Route::post('add-contact',[ContactController::class,'addContact']);
+
 
 Route::middleware([
     'auth:sanctum',

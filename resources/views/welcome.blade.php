@@ -612,7 +612,25 @@
                     type: 'text'
                 }]
             },
-
+            {
+                method: 'POST',
+                path: 'api/contacts',
+                title: 'Contact Page create ',
+                group: 'Contact Page',
+                fields: [{
+                    name: 'name',
+                    type: 'text'
+                }, {
+                    name: 'email',
+                    type: 'email'
+                }, {
+                    name: 'phone_number',
+                    type: 'text'
+                }, {
+                    name: 'message',
+                    type: 'text'
+                }]
+            },
             // --- 8. user setting ---
             {
                 method: 'GET',
