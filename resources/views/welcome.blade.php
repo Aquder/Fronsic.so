@@ -595,9 +595,9 @@
             },
               {
                 method: 'POST',
-                path: 'api/contacts',
+                path: 'api/store/contact',
                 title: 'Contact Page create ',
-                group: 'Contact Page',
+                group: 'Contact P
                 fields: [{
                     name: 'name',
                     type: 'text'
