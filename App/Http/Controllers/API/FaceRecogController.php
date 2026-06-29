@@ -46,19 +46,14 @@ class FaceRecogController extends Controller {
             $model = model_ai::create( [
                 'models'=>'face recognation'
             ] );
-            // if ( $request->route()->getName() !== 'model_ai' ) {
-
-            //     return [
-            //         'model_used'=>$model->models,
-            //         'phenotypes'  => [
-            //             'fake recognation analysis' => $data,
-            //             'image' => $imageName
-            //             ? asset( $imageName )
-            //             : null,
-            //         ]
-
-            //     ];
-            // }
+            if ( $request->route()->getName() !== 'face_recognation' ) {
+                return [
+                        'fake recognation analysis' => $data,
+                        'image' => $imageName
+                        ? asset( $imageName )
+                        : null,
+                ];
+            }
 
             return response()->json( [
                 'status'  => 'success',

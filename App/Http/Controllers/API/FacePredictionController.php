@@ -19,7 +19,7 @@ class FacePredictionController extends Controller {
         $this->faceService = $faceService;
     }
 
-    public function processFace( Request $request ): JsonResponse {
+    public function processFace( Request $request ) {
         set_time_limit( 0 );
         $request->validate( [
             'image' => 'required|image|max:10240',
@@ -59,15 +59,12 @@ class FacePredictionController extends Controller {
         $model = model_ai::create( [
             'models'=>'face reconstruction'
         ] );
-        // if ( $request->route()->getName() !== 'model_ai' ) {
-        //     return [
-        //         'model_used'=>$model->models,
-        //         'phenotypes'  => [
-        //             'face reconstruction analysis' =>$face,
-        //             'image_url' => asset( 'storage/' . $fileName ),
-        //         ]
-        //     ];
-        // }
+        if ( $request->route()->getName() !== 'face_reconstructs' ) {
+            return [
+                'face reconstruction analysis' =>$face,
+                'image_url' => asset( 'storage/' . $fileName ),
+            ];
+        }
         return response()->json( [
             'status'  => 'success',
             'message' => 'Analysis successful.',

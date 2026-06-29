@@ -75,31 +75,31 @@ class ContactController extends Controller
      *     )
      * )
      */
-    public function store(Request $request): JsonResponse
-    {
-        $validated = validator($request->all(), [
-            'name' => 'required|string|min:3',
-            'email' => 'required|email',
-            'phone_number' => 'required',
-            'message' => 'required|min:7|max:2000',
-        ]);
+    // public function store(Request $request): JsonResponse
+    // {
+    //     $validated = validator($request->all(), [
+    //         'name' => 'required|string|min:3',
+    //         'email' => 'required|email',
+    //         'phone_number' => 'required',
+    //         'message' => 'required|min:7|max:2000',
+    //     ]);
 
-        if ($validated->fails()) {
-            return response()->json([
-                'success' => false,
-                'msg' => 'Validation error',
-                'errors' => $validated->errors()
-            ], 422);
-        }
+    //     if ($validated->fails()) {
+    //         return response()->json([
+    //             'success' => false,
+    //             'msg' => 'Validation error',
+    //             'errors' => $validated->errors()
+    //         ], 422);
+    //     }
 
-        $contact = Contact::create($request->only(['name', 'email', 'message']));
+    //     $contact = Contact::create($request->only(['name', 'email', 'message']));
 
-        return response()->json([
-            'success' => true,
-            'msg' => 'Contact created successfully',
-            'data' => new ContactResource($contact),
-        ], 201);
-    }
+    //     return response()->json([
+    //         'success' => true,
+    //         'msg' => 'Contact created successfully',
+    //         'data' => new ContactResource($contact),
+    //     ], 201);
+    // }
     public function addContact(Request $request): JsonResponse
     {
         $validated = validator($request->all(), [

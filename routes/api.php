@@ -113,14 +113,15 @@ Route::middleware([
 
     // evidence
     Route::post('save-as-evidence', [EvidenceController::class, 'store']);
+    Route::post('upload-evidence', [EvidenceController::class, 'upload']);
     Route::put('update-evidence/{evidence}/use-case/{usecase}', [EvidenceController::class, 'update']);
     Route::delete('delete-evidence/{evidence}/use-case/{usecase}', [EvidenceController::class, 'destroy']);
 
     //models AI
-    Route::post('/face-recognation', [FaceRecogController::class, 'store']);
-    Route::post('/deep-fake', [DeepFakeController::class, 'store']);
-    Route::post('/dna-analysis', [DnaController::class, 'processSequence']);
-    Route::post('/face-reconstructs', [FacePredictionController::class, 'processFace']);
+    Route::post('/face-recognation', [FaceRecogController::class, 'store'])->name("face_recognation");
+    Route::post('/deep-fake', [DeepFakeController::class, 'store'])->name("deep_fake");
+    Route::post('/dna-analysis', [DnaController::class, 'processSequence'])->name("dna_analysis");
+    Route::post('/face-reconstructs', [FacePredictionController::class, 'processFace'])->name("face_reconstructs");
 
     // chat
     Route::get('/chat', [ChatController::class, 'getConversations']);

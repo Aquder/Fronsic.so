@@ -15,7 +15,7 @@ class DnaController extends Controller {
         $this->dnaService = $dnaService;
     }
 
-    public function processSequence( Request $request ): JsonResponse {
+    public function processSequence( Request $request ) {
         $request->validate( [
             'sequence' => 'required_without:file|prohibits:file|nullable|string',
             'file'     => 'required_without:sequence|prohibits:sequence|nullable|file',
@@ -49,24 +49,19 @@ class DnaController extends Controller {
             'models'=>'dna model'
         ] );
 
-        // if ( $request->route()->getName() !== 'model_ai' ) {
-        //     return [
-        //         'model_used'=>$model->models,
-
-        //         'phenotypes'  => [
-        //             'eye_color'  => $bestEyeColor,
-        //             'hair_color' => $bestHairColor,
-        //             'skin_color' => $bestSkinColor,
-        //             'ancestry'   => $bestAncestry,
-        //         ]
-        //     ];
-        // }
+        if ( $request->route()->getName() !== 'dna_analysis' ) {
+            return [
+                    'eye_color'  => $bestEyeColor,
+                    'hair_color' => $bestHairColor,
+                    'skin_color' => $bestSkinColor,
+                    'ancestry'   => $bestAncestry,
+            ];
+        }
         return response()->json( [
             'status'  => 'success',
             'message' => 'Analysis completed successfully.',
             'data'    => [
                 'model_used'=>$model->models,
-
                 'phenotypes'  => [
                     'eye_color'  => $bestEyeColor,
                     'hair_color' => $bestHairColor,

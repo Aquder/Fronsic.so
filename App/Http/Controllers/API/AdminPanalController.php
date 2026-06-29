@@ -8,6 +8,7 @@ use App\Models\Post;
 use App\Models\ModelAi;
 use App\Models\Comment;
 use App\Models\Conversation;
+use App\Models\Message;
 use App\Models\model_ai;
 use App\Models\SystemLog;
 use Illuminate\Support\Facades\Auth;
@@ -181,9 +182,34 @@ class AdminPanalController extends Controller {
         ->latest()
         ->paginate( 10, [ '*' ], 'chat_page' );
 
+
+        $totalquery=Message::where('sender','user')->count();
+
+        $query = DB::table('messages as assistant_msg')
+            ->join('messages as user_msg', function ($join) {
+                $join->on('user_msg.conversation_id', '=', 'assistant_msg.conversation_id')
+                     ->where('user_msg.sender', '=', 'user')
+                     ->where('assistant_msg.sender', '=', 'assistant')
+                     ->whereRaw('user_msg.id = (
+                         SELECT MAX(id) FROM messages
+                         WHERE conversation_id = assistant_msg.conversation_id
+                         AND sender = "user"
+                         AND id < assistant_msg.id
+                     )');
+            });
+
+        $result = $query->select(
+            DB::raw('AVG(TIMESTAMPDIFF(SECOND, user_msg.created_at, assistant_msg.created_at)) as avg_response_time')
+        )->first();
+
+        $avgTimeInSeconds = $result ? round($result->avg_response_time, 2) : 0;
+
+
         return response()->json( [
             'status' => true,
             'msg'=>'succesfully fetched data',
+            'avg_response_time' => $avgTimeInSeconds,
+            'total query'=>$totalquery,
             'data' => [
                 'Conversation' =>  $conversations,
 

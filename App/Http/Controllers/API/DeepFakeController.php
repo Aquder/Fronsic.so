@@ -53,19 +53,16 @@ class DeepFakeController extends Controller {
             $model = model_ai::create( [
                 'models'=>'deep fake'
             ] );
-            // if ( $request->route()->getName() !== 'model_ai' ) {
+            if ( $request->route()->getName() !== 'deep_fake' ) {
 
-            //     return  [
-            //         'model_used'=>$model->models,
-            //         'phenotypes'  => [
-            //             'message'=>' success discover image    ',
-            //             'Deep fake analysis'=>$data,
-            //             'image' => $imageName
-            //             ? asset( $imageName )
-            //             : null,
-            //         ]
-            //     ];
-            // }
+                return  [
+                    'message'=>' success discover image',
+                    'Deep fake analysis'=>$data,
+                    'image' => $imageName
+                    ? asset( $imageName )
+                    : null,
+                ];
+            }
             return response()->json( [
                 'status'  => 'success',
                 'message' => 'Analysis deep fake completed successfully.',

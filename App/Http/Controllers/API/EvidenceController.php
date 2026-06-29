@@ -78,48 +78,57 @@ class EvidenceController extends Controller {
 
     }
 
-    // public function upload( Request $request ): JsonResponse {
-    //     $request->validate( [
-    //         'name'       => 'required|string|max:255',
-    //         'case_id'    => 'required|exists:use_cases,id',
-    //         'model_used'    => 'required',
-    //     ], [
-    //         'model_used.required'=>'model used it must be between this [ deep fake - face recogantion -]'
-    //     ] );
-    //     $case = UseCase::where( 'user_id', Auth::id() )->find( $request->case_id );
-    //     if ( !$case ) {
-    //         return response()->json( [ 'status' => false, 'message' => 'error ! use case is not found ' ], 403 );
-    //     }
-    //     $data = null;
-    //     if ( $request->model_used === 'deep fake' ) {
-    //         $controller = new DeepFakeController();
-    //         $data = $controller->store( $request );
-    //     } elseif ( $request->model_used === 'face recognation' ) {
-    //         $controller = new FaceRecogController();
-    //         $data = $controller->store( $request );
-    //     } elseif ( $request->model_used === 'face reconstruction' ) {
-    //         $controller = new FacePredictionController();
-    //         $data = $controller->processFace( $request );
-    //     } elseif ( $request->model_used === 'dna analysis' ) {
-    //         $controller = new DnaController();
-    //         $data = $controller->processSequence( $request );
-    //     } else {
-    //         return response()->json( [
-    //             'status'  => 'false',
-    //             'message' => ' please value of model name do not match with system ',
-    //         ], 400 );
-    //     }
+    public function upload( Request $request ): JsonResponse {
+        $request->validate( [
+            'name'       => 'required|string|max:255',
+            'case_id'    => 'required|exists:use_cases,id',
+            'model_used'    => 'required',
+        ], [
+            'model_used.required'=>'model used it must be between this [ deep fake - face recogantion -]'
+        ] );
+        $case = UseCase::where( 'user_id', Auth::id() )->find( $request->case_id );
+        if ( !$case ) {
+            return response()->json( [ 'status' => false, 'message' => 'error ! use case is not found ' ], 403 );
+        }
 
-    //     $evidence = $case->evidences()->create( [
-    //         'name'       => $request->name,
-    //         'case_id'    => $request->case_id,
-    //         'data'       => $data,
-    //     ] );
-    //     return response()->json( [
-    //         'status'  => 'success',
-    //         'message' => 'Evidence uploaded successfully.',
-    //         'evidence' => $evidence
-    //     ], 201 );
-    // }
+        $data = null;
+        if ( $request->model_used === 'deep fake' ) {
+            $controller = new DeepFakeController();
+            $data = $controller->store( $request );
+        } elseif ( $request->model_used === 'face recognation' ) {
+            $controller = new FaceRecogController();
+            $data = $controller->store( $request );
+        }
+        //  elseif ( $request->model_used === 'face reconstruction' ) {
+        //     $controller = new FacePredictionController();
+        //     $data = $controller->processFace( $request );
+        // }elseif ( $request->model_used === 'dna analysis' ) {
+        //     $controller = new DnaController();
+        //     $data = $controller->processSequence( $request );
+        // }
+        else {
+            return response()->json( [
+                'status'  => 'false',
+                'message' => ' please value of model name do not match with system ,it must be models system ',
+                'names model system ' => [
+                    'deep fake',
+                    'face recogantion',
+                    'face reconstruction',
+                    'dna analysis',
+                 ],
+            ], 400 );
+        }
+
+        $evidence = $case->evidences()->create( [
+            'name'       => $request->name,
+            'case_id'    => $request->case_id,
+            'data'       => $data,
+        ] );
+        return response()->json( [
+            'status'  => 'success',
+            'message' => 'Evidence uploaded successfully.',
+            'evidence' => $evidence
+        ], 201 );
+    }
 
 }
