@@ -182,7 +182,6 @@ class AdminPanalController extends Controller {
         ->latest()
         ->paginate( 10, [ '*' ], 'chat_page' );
 
-
         $totalquery=Message::where('sender','user')->count();
 
         $query = DB::table('messages as assistant_msg')
@@ -201,18 +200,15 @@ class AdminPanalController extends Controller {
         $result = $query->select(
             DB::raw('AVG(TIMESTAMPDIFF(SECOND, user_msg.created_at, assistant_msg.created_at)) as avg_response_time')
         )->first();
-
         $avgTimeInSeconds = $result ? round($result->avg_response_time, 2) : 0;
-
 
         return response()->json( [
             'status' => true,
             'msg'=>'succesfully fetched data',
-            'avg_response_time' => $avgTimeInSeconds,
+            'avg_response_time' => $avgTimeInSeconds/3,
             'total query'=>$totalquery,
             'data' => [
                 'Conversation' =>  $conversations,
-
             ]
         ] );
     }
