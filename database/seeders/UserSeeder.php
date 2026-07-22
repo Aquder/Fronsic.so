@@ -5,16 +5,44 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use Carbon\Carbon;
 
 class UserSeeder extends Seeder
 {
+    /**
+     * Source folder where the raw seed photos live inside the repo.
+     * All seed images (users + posts) are bundled together in the same folder.
+     * IMPORTANT: commit this folder to git so it exists on the server too,
+     * since the seeder runs on the server, not locally.
+     *
+     * graduation_project/blog/database/seeders/images/posts/
+     */
+    protected string $sourceFolder = '';
+
+    /**
+     * Destination folder actually served by the app (storage/app/public/users).
+     * Adjust this if user photos are served from a different sub-folder
+     * (e.g. storage/app/public/avatars) to match how the app already saves them.
+     */
+    protected string $destinationFolder = '';
+
+    public function __construct()
+    {
+        $this->sourceFolder = database_path('seeders/images/posts');
+        $this->destinationFolder = storage_path('app/public/users');
+    }
+
     public function run(): void
     {
+        // Make sure the destination folder exists on the server before copying into it.
+        File::ensureDirectoryExists($this->destinationFolder);
+
         $users = [
             [
                 'name' => 'Dr. Ahmed El-Sherif',
-                'image' => 'photo_2_2026-07-22_03-07-32.jpg', // male
+                'source_image' => 'photo_2_2026-07-22_03-07-32.jpg', // male
                 'phone_number' => '01012345671',
                 'national_id' => '29005121200011',
                 'email' => 'ahmed.elsherif@forensic.test',
@@ -23,7 +51,7 @@ class UserSeeder extends Seeder
             ],
             [
                 'name' => 'Dr. Sara Abdallah',
-                'image' => 'photo_1_2026-07-22_03-07-32.jpg', // female
+                'source_image' => 'photo_1_2026-07-22_03-07-32.jpg', // female
                 'phone_number' => '01012345672',
                 'national_id' => '29105121200022',
                 'email' => 'sara.abdallah@forensic.test',
@@ -32,7 +60,7 @@ class UserSeeder extends Seeder
             ],
             [
                 'name' => 'Dr. Mohamed Ezzat',
-                'image' => 'photo_5_2026-07-22_03-07-32.jpg', // male
+                'source_image' => 'photo_5_2026-07-22_03-07-32.jpg', // male
                 'phone_number' => '01012345673',
                 'national_id' => '28805121200033',
                 'email' => 'mohamed.ezzat@forensic.test',
@@ -41,7 +69,7 @@ class UserSeeder extends Seeder
             ],
             [
                 'name' => 'Dr. Mona Fathy',
-                'image' => 'photo_6_2026-07-22_03-07-32.jpg', // female
+                'source_image' => 'photo_6_2026-07-22_03-07-32.jpg', // female
                 'phone_number' => '01012345674',
                 'national_id' => '29305121200044',
                 'email' => 'mona.fathy@forensic.test',
@@ -50,7 +78,7 @@ class UserSeeder extends Seeder
             ],
             [
                 'name' => 'Dr. Khaled Nour El-Din',
-                'image' => 'photo_8_2026-07-22_03-07-32.jpg', // male
+                'source_image' => 'photo_8_2026-07-22_03-07-32.jpg', // male
                 'phone_number' => '01012345675',
                 'national_id' => '28705121200055',
                 'email' => 'khaled.noureldin@forensic.test',
@@ -59,7 +87,7 @@ class UserSeeder extends Seeder
             ],
             [
                 'name' => 'Dr. Yasmin Tarek',
-                'image' => 'photo_7_2026-07-22_03-07-32.jpg', // female
+                'source_image' => 'photo_7_2026-07-22_03-07-32.jpg', // female
                 'phone_number' => '01012345676',
                 'national_id' => '29405121200066',
                 'email' => 'yasmin.tarek@forensic.test',
@@ -67,8 +95,8 @@ class UserSeeder extends Seeder
                 'role' => 'doctor',
             ],
             [
-                'name' => 'Eng. Ahmed mohamed',
-                'image' => 'photo_2026-07-22_03-46-47.jpg', // male - admin
+                'name' => 'Dr. Omar Hassan',
+                'source_image' => 'photo_13_2026-07-22_03-07-32.jpg', // male - admin
                 'phone_number' => '01012345677',
                 'national_id' => '28405121200077',
                 'email' => 'omar.hassan@forensic.test',
@@ -78,9 +106,11 @@ class UserSeeder extends Seeder
         ];
 
         foreach ($users as $user) {
+            $storedFilename = $this->storeImage($user['source_image']);
+
             DB::table('users')->insert([
                 'name' => $user['name'],
-                'image' => $user['image'],
+                'image' => $storedFilename,
                 'phone_number' => $user['phone_number'],
                 'national_id' => $user['national_id'],
                 'email' => $user['email'],
@@ -89,10 +119,35 @@ class UserSeeder extends Seeder
                 'email_verified_at' => Carbon::now(),
                 'password' => Hash::make('password123'),
                 'role' => $user['role'],
-                'remember_token' => \Illuminate\Support\Str::random(10),
+                'remember_token' => Str::random(10),
                 'created_at' => Carbon::now()->subDays(rand(60, 200)),
                 'updated_at' => Carbon::now()->subDays(rand(0, 60)),
             ]);
         }
+    }
+
+    /**
+     * Copy a bundled source photo into storage/app/public/users and return
+     * the new stored filename (matching the app's real upload naming style).
+     *
+     * Falls back to null (no image) if the source file is missing, so the
+     * seeder never breaks the run just because a photo wasn't committed.
+     */
+    protected function storeImage(string $sourceFilename): ?string
+    {
+        $sourcePath = $this->sourceFolder . DIRECTORY_SEPARATOR . $sourceFilename;
+
+        if (! File::exists($sourcePath)) {
+            $this->command?->warn("Seed image not found, skipping: {$sourcePath}");
+            return null;
+        }
+
+        $extension = File::extension($sourcePath);
+        $newFilename = Str::random(40) . '.' . $extension;
+        $destinationPath = $this->destinationFolder . DIRECTORY_SEPARATOR . $newFilename;
+
+        File::copy($sourcePath, $destinationPath);
+
+        return $newFilename;
     }
 }

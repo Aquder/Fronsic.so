@@ -4,13 +4,38 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use Carbon\Carbon;
 
 class PostSeeder extends Seeder
 {
+    /**
+     * Source folder where the raw seed images live inside the repo.
+     * IMPORTANT: commit this folder to git so it exists on the server too,
+     * since the seeder runs on the server, not locally.
+     *
+     * graduation_project/blog/database/seeders/images/posts/
+     */
+    protected string $sourceFolder = '';
+
+    /**
+     * Destination folder actually served by the app (storage/app/public/posts).
+     */
+    protected string $destinationFolder = '';
+
+    public function __construct()
+    {
+        $this->sourceFolder = database_path('seeders/images/posts');
+        $this->destinationFolder = storage_path('app/public/posts');
+    }
+
     public function run(): void
     {
-        // Available article images - distributed cyclically across article-type posts
+        // Make sure the destination folder exists on the server before copying into it.
+        File::ensureDirectoryExists($this->destinationFolder);
+
+        // Original filenames of the raw images bundled inside database/seeders/images/posts/
         $articleImages = [
             'photo_4_2026-07-22_03-07-32.jpg',
             'photo_9_2026-07-22_03-07-32.jpg',
@@ -122,14 +147,20 @@ class PostSeeder extends Seeder
 
                 if ($isArticle) {
                     $article = $articles[array_rand($articles)];
-                    $image = $articleImages[$imageIndex % count($articleImages)];
+
+                    // Pick the next source image (cycling through the pool) and
+                    // physically copy it into storage/app/public/posts with a
+                    // fresh random name, exactly like a real upload would.
+                    $sourceFilename = $articleImages[$imageIndex % count($articleImages)];
                     $imageIndex++;
+
+                    $storedFilename = $this->storeImage($sourceFilename);
 
                     DB::table('posts')->insert([
                         'title' => $article['title'],
                         'content' => $article['content'],
                         'user_id' => $user->id,
-                        'image' => $image,
+                        'image' => $storedFilename,
                         'type' => 'article',
                         'created_at' => $createdAt,
                         'updated_at' => $createdAt->copy()->addDays(rand(0, 5)),
@@ -149,5 +180,30 @@ class PostSeeder extends Seeder
                 }
             }
         }
+    }
+
+    /**
+     * Copy a bundled source image into storage/app/public/posts and return
+     * the new stored filename (matching the app's real upload naming style).
+     *
+     * Falls back to null (no image) if the source file is missing, so the
+     * seeder never breaks the run just because an image wasn't committed.
+     */
+    protected function storeImage(string $sourceFilename): ?string
+    {
+        $sourcePath = $this->sourceFolder . DIRECTORY_SEPARATOR . $sourceFilename;
+
+        if (! File::exists($sourcePath)) {
+            $this->command?->warn("Seed image not found, skipping: {$sourcePath}");
+            return null;
+        }
+
+        $extension = File::extension($sourcePath);
+        $newFilename = Str::random(40) . '.' . $extension;
+        $destinationPath = $this->destinationFolder . DIRECTORY_SEPARATOR . $newFilename;
+
+        File::copy($sourcePath, $destinationPath);
+
+        return $newFilename;
     }
 }
