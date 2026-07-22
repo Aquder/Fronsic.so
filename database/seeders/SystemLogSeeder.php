@@ -10,28 +10,38 @@ class SystemLogSeeder extends Seeder
 {
     public function run(): void
     {
-        $logTemplates = [
-            ['name' => 'user_login', 'massage' => 'Successful user login to the platform.'],
-            ['name' => 'user_logout', 'massage' => 'User logged out of the platform.'],
-            ['name' => 'use_case_created', 'massage' => 'A new use case was created by a doctor.'],
-            ['name' => 'use_case_completed', 'massage' => 'A use case status was updated to complete.'],
-            ['name' => 'post_published', 'massage' => 'A new post was published on the community platform.'],
-            ['name' => 'post_deleted', 'massage' => 'A post was deleted by its owner.'],
-            ['name' => 'comment_added', 'massage' => 'A new comment was added to a post.'],
-            ['name' => 'ai_conversation_started', 'massage' => 'A user started a new conversation with the AI assistant.'],
-            ['name' => 'password_reset', 'massage' => 'A password reset was requested for an account.'],
-            ['name' => 'account_blocked', 'massage' => 'A user account was blocked by an administrator for policy violation.'],
-            ['name' => 'account_reactivated', 'massage' => 'A user account was reactivated after review.'],
-            ['name' => 'failed_login_attempt', 'massage' => 'A failed login attempt using incorrect credentials.'],
+        // The "name" column must hold the admin's name, not a generic event key.
+        $adminName = DB::table('users')->where('role', 'admin')->value('name');
+
+        // Fallback in case no admin exists yet (should not normally happen).
+        $adminName = $adminName ?: 'System Administrator';
+
+        $logMessages = [
+            'Logged in to the platform.',
+            'Logged out of the platform.',
+            'Reviewed a newly created use case submitted by a doctor.',
+            'Marked a use case as complete after review.',
+            'Reviewed a new post published on the community platform.',
+            'Removed a post that violated community guidelines.',
+            'Reviewed a reported comment on a post.',
+            'Monitored a new conversation started with the AI assistant.',
+            'Approved a password reset request for a doctor account.',
+            'Blocked a doctor account for violating platform policies.',
+            'Reactivated a doctor account after review.',
+            'Detected a failed login attempt using incorrect credentials.',
+            'Updated platform settings.',
+            'Reviewed weekly activity report for all doctors.',
+            'Approved a new doctor registration on the platform.',
         ];
 
-        foreach ($logTemplates as $log) {
-            // Insert each log type multiple times at different timestamps to simulate real platform activity
+        foreach ($logMessages as $message) {
+            // Insert each log message multiple times at different timestamps
+            // to simulate ongoing admin activity on the platform.
             $repetitions = rand(2, 5);
             for ($i = 0; $i < $repetitions; $i++) {
                 DB::table('system_logs')->insert([
-                    'name' => $log['name'],
-                    'massage' => $log['massage'],
+                    'name' => $adminName,
+                    'massage' => $message,
                     'created_at' => Carbon::now()->subDays(rand(0, 150))->subMinutes(rand(0, 1440)),
                     'updated_at' => Carbon::now()->subDays(rand(0, 150)),
                 ]);
