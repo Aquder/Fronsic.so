@@ -155,12 +155,13 @@ class PostSeeder extends Seeder
                     $imageIndex++;
 
                     $storedFilename = $this->storeImage($sourceFilename);
+                    $imagepath= 'posts/' . $storedFilename;
 
                     DB::table('posts')->insert([
                         'title' => $article['title'],
                         'content' => $article['content'],
                         'user_id' => $user->id,
-                        'image' => $storedFilename,
+                        'image' => $imagepath,
                         'type' => 'article',
                         'created_at' => $createdAt,
                         'updated_at' => $createdAt->copy()->addDays(rand(0, 5)),

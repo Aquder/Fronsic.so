@@ -107,10 +107,12 @@ class UserSeeder extends Seeder
 
         foreach ($users as $user) {
             $storedFilename = $this->storeImage($user['source_image']);
+            $imagepath= 'posts/' . $storedFilename;
+
 
             DB::table('users')->insert([
                 'name' => $user['name'],
-                'image' => $storedFilename,
+                'image' => $imagepath,
                 'phone_number' => $user['phone_number'],
                 'national_id' => $user['national_id'],
                 'email' => $user['email'],
