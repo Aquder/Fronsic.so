@@ -41,11 +41,11 @@ class UserSeeder extends Seeder
 
         $users = [
             [
-                'name' => 'Dr. Ahmed El-Sherif',
+                'name' => 'Dr. Ahmed Mohamed',
                 'source_image' => 'photo_2_2026-07-22_03-07-32.jpg', // male
                 'phone_number' => '01012345671',
                 'national_id' => '29005121200011',
-                'email' => 'ahmed.elsherif@forensic.test',
+                'email' => 'Dr_ahmed@forensic.com',
                 'date_of_birth' => '1985-03-14',
                 'role' => 'doctor',
             ],
@@ -95,11 +95,11 @@ class UserSeeder extends Seeder
                 'role' => 'doctor',
             ],
             [
-                'name' => 'Dr. Omar Hassan',
+                'name' => 'Admin servies',
                 'source_image' => 'photo_13_2026-07-22_03-07-32.jpg', // male - admin
                 'phone_number' => '01012345677',
                 'national_id' => '28405121200077',
-                'email' => 'omar.hassan@forensic.test',
+                'email' => 'Admin@forensic.com',
                 'date_of_birth' => '1980-12-25',
                 'role' => 'admin',
             ],
@@ -119,7 +119,7 @@ class UserSeeder extends Seeder
                 'date_of_birth' => $user['date_of_birth'],
                 'status' => 'active',
                 'email_verified_at' => Carbon::now(),
-                'password' => Hash::make('password123'),
+                'password' => Hash::make('10201020'),
                 'role' => $user['role'],
                 'remember_token' => Str::random(10),
                 'created_at' => Carbon::now()->subDays(rand(60, 200)),
