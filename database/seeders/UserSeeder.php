@@ -41,7 +41,7 @@ class UserSeeder extends Seeder
 
         $users = [
             [
-                'name' => 'Dr. Ahmed Mohamed',
+                'name' => 'Ahmed Mohamed',
                 'source_image' => 'photo_2_2026-07-22_03-07-32.jpg', // male
                 'phone_number' => '01012345671',
                 'national_id' => '29005121200011',
