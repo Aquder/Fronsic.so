@@ -45,7 +45,7 @@ class UserSeeder extends Seeder
                 'source_image' => 'photo_2_2026-07-22_03-07-32.jpg', // male
                 'phone_number' => '01012345671',
                 'national_id' => '29005121200011',
-                'email' => 'Dr_ahmed@forensic.com',
+                'email' => 'ahmed@gmail.com',
                 'date_of_birth' => '1985-03-14',
                 'role' => 'doctor',
             ],
@@ -99,7 +99,7 @@ class UserSeeder extends Seeder
                 'source_image' => 'photo_13_2026-07-22_03-07-32.jpg', // male - admin
                 'phone_number' => '01012345677',
                 'national_id' => '28405121200077',
-                'email' => 'Admin@forensic.com',
+                'email' => 'Admin@gmail.com',
                 'date_of_birth' => '1980-12-25',
                 'role' => 'admin',
             ],
@@ -107,7 +107,7 @@ class UserSeeder extends Seeder
 
         foreach ($users as $user) {
             $storedFilename = $this->storeImage($user['source_image']);
-            $imagepath= 'posts/' . $storedFilename;
+            $imagepath= 'users/' . $storedFilename;
 
 
             DB::table('users')->insert([
